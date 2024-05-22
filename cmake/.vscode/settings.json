@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "bf_middle.h": "c",
+        "stdint.h": "c",
+        "stdlib.h": "c",
+        "bf_list.h": "c",
+        "stdarg.h": "c",
+        "stdio.h": "c",
+        "routin_module.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
+}

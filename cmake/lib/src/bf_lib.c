@@ -1,87 +1,100 @@
-#include "./include/lib.h"
-
+/**
+ * @file bf_lib.c
+ * @author yusaka (luckychaoyue1@gmail.com)
+ * @brief 
+ * @version 1.0
+ * @date 2024-05-22
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
+#include "bf_lib.h"
 /**
  * @brief 计算字符串长度
- * 
- * @param _str 缓冲区
- * @return int 个数
+ *
+ * @param _str 缓存区
+ * @return int32_t 个数
  */
-int str_len(char *_str)
+int32_t str_len(char *_str)
 {
-	int len = 0;
+    int32_t len = 0;
 
-	while (*_str++) len++;
-	return len;
+    while (*_str++)
+        len++;
+    return len;
 }
 
 /**
  * @brief 复制字符串
- * 
- * @param _tar 目标缓冲区
- * @param _src 源缓冲区
+ *
+ * @param _tar 目标缓存区
+ * @param _src 源缓存区
  */
 void str_cpy(char *_tar, char *_src)
 {
-	do
-	{
-		*_tar++ = *_src;
-	}
-	while (*_src++);
+    do
+    {
+        *_tar++ = *_src;
+    } while (*_src++);
 }
 
 /**
  * @brief 字符串比较
- * 
+ *
  * @param _s1 字符串1
  * @param _s2 字符串2
- * @return int 0 表示相等 非0表示不等
+ * @return int32_t 0 表示相等 非0表示不等
  */
-int str_cmp(char * _s1, char * _s2)
+int32_t str_cmp(char *_s1, char *_s2)
 {
-	while ((*_s1!=0) && (*_s2!=0) && (*_s1==*_s2))
-	{
-		_s1++;
-		_s2++;
-	}
-	return *_s1 - *_s2;
+    while ((*_s1 != 0) && (*_s2 != 0) && (*_s1 == *_s2))
+    {
+        _s1++;
+        _s2++;
+    }
+    return *_s1 - *_s2;
 }
 
 /**
  * @brief 将内存块的内容设置为指定的值
- * 
+ *
  * @param _ptr 要设置的内存块的指针
  * @param _value 要设置的值
  * @param _len 要设置的字节数
  */
-void mem_set(void *_ptr, int _value, int _len) {
+void mem_set(void *_ptr, int32_t _value, int32_t _len)
+{
     char *p = (char *)_ptr;
-    while (_len--) {
+    while (_len--)
+    {
         *p++ = (char)_value;
     }
 }
 
 /**
  * @brief 将一个内存块的内容复制到另一个内存块
- * 
+ *
  * @param _dest 目标内存块的指针
  * @param _src 源内存块的指针
  * @param _len 要复制的字节数
  */
-void mem_cpy(void *_dest, const void *_src, int _len) {
+void mem_cpy(void *_dest, const void *_src, int32_t _len)
+{
     char *d = (char *)_dest;
     const char *s = (const char *)_src;
 
-    while (_len--) {
+    while (_len--)
+    {
         *d++ = *s++;
     }
 }
 
 /**
  * @brief CRC-8 校验函数
- * 
- * @param buf 缓冲区
+ *
+ * @param buf 缓存区
  * @param len 长度
- * @return uint16_t 
+ * @return uint16_t
  */
 uint16_t Check_CRC8(uint8_t *buf, uint16_t len)
 {
@@ -106,10 +119,10 @@ uint16_t Check_CRC8(uint8_t *buf, uint16_t len)
 
 /**
  * @brief Modbus CRC-16 校验函数
- * 
- * @param data 缓冲区
+ *
+ * @param data 缓存区
  * @param length 长度
- * @return uint16_t 
+ * @return uint16_t
  */
 uint16_t Check_Modbus_CRC16(uint8_t *data, uint16_t length)
 {
@@ -136,10 +149,10 @@ uint16_t Check_Modbus_CRC16(uint8_t *data, uint16_t length)
 
 /**
  * @brief Xmodem CRC-16 校验函数
- * 
- * @param buf 缓冲区
+ *
+ * @param buf 缓存区
  * @param len 长度
- * @return uint16_t 
+ * @return uint16_t
  */
 uint16_t Check_Xmodeme_CRC16(uint8_t *buf, uint16_t len)
 {
@@ -164,10 +177,10 @@ uint16_t Check_Xmodeme_CRC16(uint8_t *buf, uint16_t len)
 
 /**
  * @brief Ymodem CRC-16 校验函数
- * 
- * @param buf 缓冲区
+ *
+ * @param buf 缓存区
  * @param len 长度
- * @return uint16_t 
+ * @return uint16_t
  */
 uint16_t Check_Ymodeme_CRC16(uint8_t *buf, uint16_t len)
 {
@@ -189,3 +202,5 @@ uint16_t Check_Ymodeme_CRC16(uint8_t *buf, uint16_t len)
     }
     return crc;
 }
+
+
