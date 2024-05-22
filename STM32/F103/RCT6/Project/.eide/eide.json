@@ -1,0 +1,301 @@
+{
+  "name": "Project",
+  "type": "ARM",
+  "dependenceList": [],
+  "srcDirs": [
+    ".eide/deps"
+  ],
+  "virtualFolder": {
+    "name": "<virtual_root>",
+    "files": [],
+    "folders": [
+      {
+        "name": "Bsp",
+        "files": [
+          {
+            "path": "../Bsp/scr/bsp_adc_app.c"
+          },
+          {
+            "path": "../Bsp/scr/bsp_adc.c"
+          },
+          {
+            "path": "../Bsp/scr/bsp_cpu_flash.c"
+          },
+          {
+            "path": "../Bsp/scr/bsp_esp8266.c"
+          },
+          {
+            "path": "../Bsp/scr/bsp_i2c_app.c"
+          },
+          {
+            "path": "../Bsp/scr/bsp_key.c"
+          },
+          {
+            "path": "../Bsp/scr/bsp_led.c"
+          },
+          {
+            "path": "../Bsp/scr/bsp_oled_app.c"
+          },
+          {
+            "path": "../Bsp/scr/bsp_oled.c"
+          },
+          {
+            "path": "../Bsp/scr/bsp_pwm.c"
+          },
+          {
+            "path": "../Bsp/scr/bsp_soft_i2c.c"
+          },
+          {
+            "path": "../Bsp/scr/bsp_soft_spi.c"
+          },
+          {
+            "path": "../Bsp/scr/bsp_systick.c"
+          },
+          {
+            "path": "../Bsp/scr/bsp_uart.c"
+          },
+          {
+            "path": "../Bsp/scr/bsp_user_lib.c"
+          },
+          {
+            "path": "../Bsp/scr/multi_button.c"
+          },
+          {
+            "path": "../Bsp/scr/oled_font.c"
+          }
+        ],
+        "folders": []
+      },
+      {
+        "name": "Library",
+        "files": [
+          {
+            "path": "../Library/misc.c"
+          },
+          {
+            "path": "../Library/stm32f10x_adc.c"
+          },
+          {
+            "path": "../Library/stm32f10x_dma.c"
+          },
+          {
+            "path": "../Library/stm32f10x_exti.c"
+          },
+          {
+            "path": "../Library/stm32f10x_flash.c"
+          },
+          {
+            "path": "../Library/stm32f10x_gpio.c"
+          },
+          {
+            "path": "../Library/stm32f10x_rcc.c"
+          },
+          {
+            "path": "../Library/stm32f10x_rtc.c"
+          },
+          {
+            "path": "../Library/stm32f10x_spi.c"
+          },
+          {
+            "path": "../Library/stm32f10x_tim.c"
+          },
+          {
+            "path": "../Library/stm32f10x_usart.c"
+          }
+        ],
+        "folders": []
+      },
+      {
+        "name": "Start",
+        "files": [
+          {
+            "path": "../Start/core_cm3.c"
+          },
+          {
+            "path": "../Start/startup_stm32f10x_hd.s"
+          },
+          {
+            "path": "../Start/system_stm32f10x.c"
+          }
+        ],
+        "folders": []
+      },
+      {
+        "name": "User",
+        "files": [
+          {
+            "path": "../User/main.c"
+          },
+          {
+            "path": "../User/stm32f10x_it.c"
+          }
+        ],
+        "folders": []
+      }
+    ]
+  },
+  "outDir": "build",
+  "deviceName": null,
+  "packDir": null,
+  "miscInfo": {
+    "uid": "1ecf731467cebc83c6b2875e4f74c7da"
+  },
+  "targets": {
+    "Target 1": {
+      "excludeList": [],
+      "toolchain": "AC5",
+      "compileConfig": {
+        "cpuType": "Cortex-M3",
+        "floatingPointHardware": "none",
+        "scatterFilePath": "",
+        "useCustomScatterFile": false,
+        "storageLayout": {
+          "RAM": [
+            {
+              "tag": "RAM",
+              "id": 1,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "noInit": false
+            },
+            {
+              "tag": "RAM",
+              "id": 2,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "noInit": false
+            },
+            {
+              "tag": "RAM",
+              "id": 3,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "noInit": false
+            },
+            {
+              "tag": "IRAM",
+              "id": 1,
+              "mem": {
+                "startAddr": "0x20000000",
+                "size": "0xc000"
+              },
+              "isChecked": true,
+              "noInit": false
+            },
+            {
+              "tag": "IRAM",
+              "id": 2,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "noInit": false
+            }
+          ],
+          "ROM": [
+            {
+              "tag": "ROM",
+              "id": 1,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "isStartup": false
+            },
+            {
+              "tag": "ROM",
+              "id": 2,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "isStartup": false
+            },
+            {
+              "tag": "ROM",
+              "id": 3,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "isStartup": false
+            },
+            {
+              "tag": "IROM",
+              "id": 1,
+              "mem": {
+                "startAddr": "0x8000000",
+                "size": "0x40000"
+              },
+              "isChecked": true,
+              "isStartup": true
+            },
+            {
+              "tag": "IROM",
+              "id": 2,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "isStartup": false
+            }
+          ]
+        },
+        "options": "null"
+      },
+      "uploader": "OpenOCD",
+      "uploadConfig": {
+        "bin": "",
+        "target": "stm32f1x",
+        "interface": "stlink-v2-1",
+        "baseAddr": "0x08000000"
+      },
+      "uploadConfigMap": {
+        "JLink": {
+          "bin": "",
+          "baseAddr": "",
+          "cpuInfo": {
+            "vendor": "null",
+            "cpuName": "null"
+          },
+          "proType": 1,
+          "speed": 8000,
+          "otherCmds": ""
+        }
+      },
+      "custom_dep": {
+        "name": "default",
+        "incList": [
+          "../Start",
+          "../Library",
+          "../User",
+          "../Bsp/inc",
+          ".cmsis/include",
+          "RTE/_Target 1",
+          ".eide/deps"
+        ],
+        "libList": [],
+        "sourceDirList": [],
+        "defineList": [
+          "USE_STDPERIPH_DRIVER",
+          "STM32F10X_HD"
+        ]
+      }
+    }
+  },
+  "version": "3.3"
+}
