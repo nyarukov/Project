@@ -54,6 +54,7 @@ typedef struct bf_list
         _list->prev = _list; \
     })
 
+#define bf_list_empty(_list)    __CMP_REG(_list,NULL)
 /**
  * \brief 将节点插入到指定节点之前
  * \param [in] _list 链表中的某个节点指针
@@ -92,6 +93,6 @@ typedef struct bf_list
     })
 
 #define bf_list_foreach(_list) \
-    for (bf_list *count = _list->next; count != _list; count = count->next)
+    for (bf_list *count = _list->prev; count != _list; count = count->prev)
 
 #endif // !__BF_LIST_H

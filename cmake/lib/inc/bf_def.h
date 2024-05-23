@@ -78,4 +78,21 @@ typedef enum
     BF_DUPLICATE_ENTRY    // ????????
 } Status;
 
+// void Swap_Byte_Long(uint8_t *buf)
+// {
+//     uint64_t result = 0;
+
+//     result |= ((uint64_t)buf[0] << 56);
+//     result |= ((uint64_t)buf[1] << 48);
+//     result |= ((uint64_t)buf[2] << 40);
+//     result |= ((uint64_t)buf[3] << 32);
+//     result |= ((uint64_t)buf[4] << 24);
+//     result |= ((uint64_t)buf[5] << 16);
+//     result |= ((uint64_t)buf[6] << 8);
+//     result |= ((uint64_t)buf[7]);
+
+//     *((uint64_t*)buf) = result;
+// }
+
+
 #endif 

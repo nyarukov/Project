@@ -6,7 +6,10 @@
         "bf_list.h": "c",
         "stdarg.h": "c",
         "stdio.h": "c",
-        "routin_module.h": "c"
+        "routin_module.h": "c",
+        "bf_def.h": "c",
+        "bf_lib.h": "c",
+        "string.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
