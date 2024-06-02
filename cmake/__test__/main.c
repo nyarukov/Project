@@ -1,12 +1,12 @@
 /**
  * @file main.c
  * @author yusaka (luckychaoyue1@gmail.com)
- * @brief 
+ * @brief
  * @version 0.1
  * @date 2024-05-23
- * 
+ *
  * @copyright Copyright (c) 2024
- * 
+ *
  */
 #include "bf_middle.h"
 
@@ -88,10 +88,25 @@ void test_function2(void)
     Route_Forward(1,4,_1STR4,str_len(_1STR4)+1);
     Route_Forward(1,5,_1STR5,str_len(_1STR5)+1);
 
-    Routin_ID_Cancle(3);
+    Routin_ID_Cancle(2);
     Routin_Foreach();
-    //Routin_ALL_Cancle();
-    //Routin_Foreach();
+
+    Route_Forward(1, 1, _1STR1, str_len(_1STR1) + 1);
+    Route_Forward(1, 2, _1STR2, str_len(_1STR2) + 1);
+    Route_Forward(1, 3, _1STR3, str_len(_1STR3) + 1);
+    Route_Forward(1, 4, _1STR4, str_len(_1STR4) + 1);
+    Route_Forward(1, 5, _1STR5, str_len(_1STR5) + 1);
+
+    Routin_Foreach();
+
+    Route_Forward(1, 1, _1STR1, str_len(_1STR1) + 1);
+    Route_Forward(1, 2, _1STR2, str_len(_1STR2) + 1);
+    Route_Forward(1, 3, _1STR3, str_len(_1STR3) + 1);
+    Route_Forward(1, 4, _1STR4, str_len(_1STR4) + 1);
+    Route_Forward(1, 5, _1STR5, str_len(_1STR5) + 1);
+
+    Routin_ALL_Cancle();
+    Routin_Foreach();
 }
 
 

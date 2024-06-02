@@ -16,10 +16,9 @@
 /**
  * \brief 双向链表节点结构体定义
  */
-typedef struct bf_list
-{
-    struct bf_list *next; /**< 指向下一个节点的指针 */
-    struct bf_list *prev; /**< 指向上一个节点的指针 */
+typedef struct bf_list {
+  struct bf_list *next; /**< 指向下一个节点的指针 */
+  struct bf_list *prev; /**< 指向上一个节点的指针 */
 } bf_list;
 
 /**
@@ -48,51 +47,68 @@ typedef struct bf_list
  * \brief 初始化链表头节点
  * \param [in] _list 链表头节点指针
  */
-#define bf_list_init(_list)  \
-    ({                       \
-        _list->next = _list; \
-        _list->prev = _list; \
-    })
+#define bf_list_init(_list)                                                    \
+  ({                                                                           \
+    _list->next = _list;                                                       \
+    _list->prev = _list;                                                       \
+  })
 
-#define bf_list_empty(_list)    __CMP_REG(_list,NULL)
+#define bf_list_empty(_list) __CMP_REG(_list, NULL)
 /**
  * \brief 将节点插入到指定节点之前
  * \param [in] _list 链表中的某个节点指针
  * \param [in] _node 要插入的节点指针
  */
-#define bf_list_insert_before(_list, _node) \
-    ({                                      \
-        _list->prev->next = _node;          \
-        _node->prev = _list->prev;          \
-        _node->next = _list;                \
-        _list->prev = _node;                \
-    })
+#define bf_list_insert_before(_list, _node)                                    \
+  ({                                                                           \
+    _list->prev->next = _node;                                                 \
+    _node->prev = _list->prev;                                                 \
+    _node->next = _list;                                                       \
+    _list->prev = _node;                                                       \
+  })
 
 /**
  * \brief 将节点插入到指定节点之后
  * \param [in] _list 链表中的某个节点指针
  * \param [in] _node 要插入的节点指针
  */
-#define bf_list_insert_later(_list, _node) \
-    ({                                     \
-        _list->next->prev = _node;         \
-        _node->next = _list->next;         \
-        _node->prev = _list;               \
-        _list->next = _node;               \
-    })
+#define bf_list_insert_later(_list, _node)                                     \
+  ({                                                                           \
+    _list->next->prev = _node;                                                 \
+    _node->next = _list->next;                                                 \
+    _node->prev = _list;                                                       \
+    _list->next = _node;                                                       \
+  })
 
 /**
  * \brief 从链表中移除指定节点
  * \param [in] _node 要移除的节点指针
  */
-#define bf_list_remove(_node)              \
-    ({                                     \
-        _node->prev->next = _node->next;   \
-        _node->next->prev = _node->prev;   \
-        _node->next = _node->prev = _node; \
-    })
+#define bf_list_remove(_node)                                                  \
+  ({                                                                           \
+    _node->prev->next = _node->next;                                           \
+    _node->next->prev = _node->prev;                                           \
+    _node->next = _node->prev = NULL;                                          \
+  })
 
-#define bf_list_foreach(_list) \
-    for (bf_list *count = _list->prev; count != _list; count = count->prev)
+/**
+ * @brief 释放节点内存
+ *
+ * @param node 要释放的节点
+ */
+#define bf_free_node(_node)                                                    \
+  do {                                                                         \
+    if (((_node->prev) != NULL) || ((_node->next) != NULL)) {                                                       \
+      free(_node);                                                             \
+    }                                                                          \
+  } while (0)
+
+/**
+ * \brief
+ *
+ * \param [in] _list 链表头节点指针
+ */
+#define bf_list_foreach(_list)                                                 \
+  for (bf_list *count = _list->prev; count != _list; count = count->prev)
 
 #endif // !__BF_LIST_H

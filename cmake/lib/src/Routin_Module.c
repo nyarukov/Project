@@ -24,20 +24,13 @@ Status Routin_Register(int _ID, Status (*_Recv)(int, int, void*, int))
 {
     if(bf_list_empty(RM_List))
     {
-        RM_List = bf_malloc(bf_list);
         if(bf_list_empty(RM_List))
-        {
-            return BF_ERROR;
-        }
-        bf_list_init(RM_List);
+            Create_Root;
     }
 
     struct bf_list *node = bf_new_node(Routin_Module);
-
-    if(bf_list_empty(node))
-    {
+    if (bf_list_empty(RM_List))
         return BF_ERROR;
-    }
 
     bf_get_elem(node, Routin_Module)->ID = _ID;
     bf_get_elem(node, Routin_Module)->Send = _Recv;
@@ -62,17 +55,13 @@ Status Routin_ID_Cancle(int _ID)
         Routin_Module *Clear_Module = bf_get_elem(count,Routin_Module);
         if(Clear_Module->ID == _ID)
         {
-            bf_list_remove(count);
-            free(count);
-            return BF_OK;
-        }
-        else
-        {
-            _LOG_Routin("ID NULL!\r\n",NULL);
-            return BF_NOT_FOUND;
+          bf_list_remove(count);
+          bf_free_node(count);
+          return BF_OK;
         }
     }
-    return BF_OK;
+    _LOG_Routin("ID NULL!\r\n", NULL);
+    return BF_NOT_FOUND;
 }
 
 /**
@@ -82,12 +71,12 @@ Status Routin_ID_Cancle(int _ID)
  */
 Status Routin_ALL_Cancle(void)
 {
-    bf_list_foreach(RM_List)
-    {
-        bf_list_remove(count);
-        free(count);
-    }
-    return BF_OK;
+  bf_list_foreach(RM_List) { 
+    printf("--->> a\r\n");
+    bf_list_remove(count);
+    bf_free_node(count);
+  }
+  return BF_OK;
 }
 
 
@@ -102,8 +91,6 @@ void Routin_Foreach(void)
         _LOG_Routin("--> ID: %d\r\n", bf_get_elem(count,Routin_Module)->ID);
     }
 }
-
-
 
 /**
  * \brief 路由转发数据到目的模块
@@ -132,5 +119,6 @@ Status Route_Forward(int _Src, int _Dst, void * _pBuf, int _Len)
             }
         }
     }
-    return BF_OK;
+    _LOG_Routin("_Dst NULL!\r\n", NULL);
+    return BF_NOT_FOUND;
 }

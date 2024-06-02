@@ -1,26 +1,26 @@
 [
 {
-  "directory": "E:/Yusaka/BF/cmake/build",
-  "command": "C:\\mingw64\\bin\\gcc.exe  @CMakeFiles/app.dir/includes_C.rsp -g -o CMakeFiles\\app.dir\\__test__\\main.c.obj -c E:\\Yusaka\\BF\\cmake\\__test__\\main.c",
-  "file": "E:/Yusaka/BF/cmake/__test__/main.c",
+  "directory": "D:/Project/cmake/build",
+  "command": "C:\\mingw64\\bin\\gcc.exe  @CMakeFiles/app.dir/includes_C.rsp -g -o CMakeFiles\\app.dir\\__test__\\main.c.obj -c D:\\Project\\cmake\\__test__\\main.c",
+  "file": "D:/Project/cmake/__test__/main.c",
   "output": "CMakeFiles/app.dir/__test__/main.c.obj"
 },
 {
-  "directory": "E:/Yusaka/BF/cmake/build",
-  "command": "C:\\mingw64\\bin\\gcc.exe  @CMakeFiles/app.dir/includes_C.rsp -g -o CMakeFiles\\app.dir\\lib\\src\\Routin_Module.c.obj -c E:\\Yusaka\\BF\\cmake\\lib\\src\\Routin_Module.c",
-  "file": "E:/Yusaka/BF/cmake/lib/src/Routin_Module.c",
+  "directory": "D:/Project/cmake/build",
+  "command": "C:\\mingw64\\bin\\gcc.exe  @CMakeFiles/app.dir/includes_C.rsp -g -o CMakeFiles\\app.dir\\lib\\src\\Routin_Module.c.obj -c D:\\Project\\cmake\\lib\\src\\Routin_Module.c",
+  "file": "D:/Project/cmake/lib/src/Routin_Module.c",
   "output": "CMakeFiles/app.dir/lib/src/Routin_Module.c.obj"
 },
 {
-  "directory": "E:/Yusaka/BF/cmake/build",
-  "command": "C:\\mingw64\\bin\\gcc.exe  @CMakeFiles/app.dir/includes_C.rsp -g -o CMakeFiles\\app.dir\\lib\\src\\bf_buffer.c.obj -c E:\\Yusaka\\BF\\cmake\\lib\\src\\bf_buffer.c",
-  "file": "E:/Yusaka/BF/cmake/lib/src/bf_buffer.c",
+  "directory": "D:/Project/cmake/build",
+  "command": "C:\\mingw64\\bin\\gcc.exe  @CMakeFiles/app.dir/includes_C.rsp -g -o CMakeFiles\\app.dir\\lib\\src\\bf_buffer.c.obj -c D:\\Project\\cmake\\lib\\src\\bf_buffer.c",
+  "file": "D:/Project/cmake/lib/src/bf_buffer.c",
   "output": "CMakeFiles/app.dir/lib/src/bf_buffer.c.obj"
 },
 {
-  "directory": "E:/Yusaka/BF/cmake/build",
-  "command": "C:\\mingw64\\bin\\gcc.exe  @CMakeFiles/app.dir/includes_C.rsp -g -o CMakeFiles\\app.dir\\lib\\src\\bf_lib.c.obj -c E:\\Yusaka\\BF\\cmake\\lib\\src\\bf_lib.c",
-  "file": "E:/Yusaka/BF/cmake/lib/src/bf_lib.c",
+  "directory": "D:/Project/cmake/build",
+  "command": "C:\\mingw64\\bin\\gcc.exe  @CMakeFiles/app.dir/includes_C.rsp -g -o CMakeFiles\\app.dir\\lib\\src\\bf_lib.c.obj -c D:\\Project\\cmake\\lib\\src\\bf_lib.c",
+  "file": "D:/Project/cmake/lib/src/bf_lib.c",
   "output": "CMakeFiles/app.dir/lib/src/bf_lib.c.obj"
 }
 ]

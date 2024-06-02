@@ -7,10 +7,10 @@ file(REMOVE_RECURSE
   "CMakeFiles/app.dir/lib/src/bf_buffer.c.obj.d"
   "CMakeFiles/app.dir/lib/src/bf_lib.c.obj"
   "CMakeFiles/app.dir/lib/src/bf_lib.c.obj.d"
-  "E:/Yusaka/BF/cmake/bin/app.exe"
-  "E:/Yusaka/BF/cmake/bin/app.exe.manifest"
-  "E:/Yusaka/BF/cmake/bin/app.pdb"
-  "E:/Yusaka/BF/cmake/bin/libapp.dll.a"
+  "D:/Project/cmake/bin/app.exe"
+  "D:/Project/cmake/bin/app.exe.manifest"
+  "D:/Project/cmake/bin/app.pdb"
+  "D:/Project/cmake/bin/libapp.dll.a"
 )
 
 # Per-language clean rules from dependency scanning.
