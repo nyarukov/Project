@@ -18,6 +18,7 @@
 typedef struct Struct_Para
 {
     uint16_t DI_Value[(DI_NUM + 15) >> 4];
+    uint8_t DO_Value[(DO_NUM + 15) >> 4];
 } USER_PARA;
 
 extern USER_PARA UserPara;
