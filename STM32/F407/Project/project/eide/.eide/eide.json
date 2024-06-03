@@ -194,7 +194,10 @@
             "name": "peripherals",
             "files": [
               {
-                "path": "../../src/peripherals/key.c"
+                "path": "../../src/peripherals/DI.c"
+              },
+              {
+                "path": "../../src/peripherals/DO.c"
               },
               {
                 "path": "../../src/peripherals/main.c"
@@ -204,6 +207,12 @@
               },
               {
                 "path": "../../src/peripherals/oled_096.c"
+              },
+              {
+                "path": "../../src/peripherals/oled_menu.c"
+              },
+              {
+                "path": "../../src/peripherals/Struct_Para.c"
               },
               {
                 "path": "../../src/peripherals/w25qxx.c"

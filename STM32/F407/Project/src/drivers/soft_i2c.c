@@ -113,23 +113,6 @@ void Soft_I2C_Init(void)
     // clang-format on
 }
 
-// #if I2C1_EN == 1
-
-// #endif
-
-// #if I2C2_EN == 1
-
-// #endif
-
-// #if I2C3_EN == 1
-
-// #endif
-
-// #if I2C4_EN == 1
-
-// #endif
-// }
-
 /**
  * @brief 设置SDA输入/输出
  *

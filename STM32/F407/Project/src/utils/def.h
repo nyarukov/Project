@@ -3,6 +3,7 @@
 
 #include "middle.h"
 
+// clang-format off
 /************************************************内存访问属性宏定义*******************************************************/
 #define __I volatile const /* 只读属性 */
 #define __O volatile       /* 只写属性 */
@@ -17,8 +18,12 @@
 #define ARRAY_SIZE(x) (sizeof(x) / (sizeof((x)[0])))
 
 /************************************************字符串操作*******************************************************/
-#define CONCAT(a, b) a##b /* 合并两个标识符 */
-#define STR(s) #s         /* 将参数转换为字符串 */
+// 拼接宏
+#define CONCAT(a, b) a##b
+#define CONCAT3(a, b, c) a##b##c
+
+
+#define STR(s) #s /* 将参数转换为字符串 */
 
 /************************************************值转换*******************************************************/
 #define BMIN(a, b) ((a) < (b) ? (a) : (b)) /* 最小值宏定义 */
@@ -42,6 +47,7 @@
 #define __CMP_REG(REG, MASK) ((REG) == (MASK))          /* 比较寄存器值 */
 #define __MASK_BIT(DATA, MASK) ((DATA) & ((1 << MASK))) /*保留指定位*/
 
+// clang-format on
 typedef enum
 {
     BF_OK = 0,            // 成功

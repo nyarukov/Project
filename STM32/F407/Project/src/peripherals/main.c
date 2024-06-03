@@ -4,6 +4,8 @@
 #include "soft_i2c.h"
 #include "oled_096.h"
 #include "mpu6050.h"
+#include "DI.h"
+#include "Struct_Para.h"
 
 #define Version "STM32F407 V1.0"
 
@@ -17,7 +19,9 @@ int main(void)
 #if (UART_COUNT > 0)
 	COM_Init();
 #endif
-
+#if DI_NUM > 0
+	DI_Init();
+#endif
 #if (I2C_COUNT > 0)
 	Soft_I2C_Init();
 #endif
@@ -32,17 +36,17 @@ int main(void)
 
 	_LOG("%s\r\n", Version);
 
-	// OLED_Init();
+	OLED_Init();
 
-	// OLED_Clear(0x00);
+	OLED_Clear(0x00);
 
-	// OLED_ShowString(10, 2, "HHD Hello!", 16);
-	// OLED_ShowCHinese(0, 0, 0);
+	OLED_ShowString(10, 2, "HHD Hello!", 16);
+	OLED_ShowCHinese(0, 0, 0);
 
 	while (1)
 	{
-		I2C_Test();
-
+		// I2C_Test();
+		DI_Read(&UserPara.DI_Value);
 		IO_Write(PF9, _val);
 		IO_Write(PF10, _val = ~_val);
 		Delay_Ms(500);
