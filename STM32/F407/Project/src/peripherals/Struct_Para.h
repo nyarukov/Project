@@ -14,11 +14,11 @@
 
 #include "middle.h"
 #include "DI.h"
+#include "DO.h"
 
 typedef struct Struct_Para
 {
-    uint16_t DI_Value[(DI_NUM + 15) >> 4];
-    uint8_t DO_Value[(DO_NUM + 15) >> 4];
+    int8_t a;
 } USER_PARA;
 
 extern USER_PARA UserPara;

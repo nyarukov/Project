@@ -723,6 +723,41 @@
               <FileType>1</FileType>
               <FilePath>..\..\src\peripherals\main.c</FilePath>
             </File>
+            <File>
+              <FileName>Struct_Para.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\peripherals\Struct_Para.c</FilePath>
+            </File>
+            <File>
+              <FileName>DI.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\peripherals\DI.c</FilePath>
+            </File>
+            <File>
+              <FileName>DO.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\peripherals\DO.c</FilePath>
+            </File>
+            <File>
+              <FileName>mpu6050.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\peripherals\mpu6050.c</FilePath>
+            </File>
+            <File>
+              <FileName>oled_096.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\peripherals\oled_096.c</FilePath>
+            </File>
+            <File>
+              <FileName>oled_menu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\peripherals\oled_menu.c</FilePath>
+            </File>
+            <File>
+              <FileName>w25qxx.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\..\src\peripherals\w25qxx.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

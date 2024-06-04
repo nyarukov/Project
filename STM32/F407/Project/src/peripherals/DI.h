@@ -13,25 +13,34 @@
 // 头文件内容...
 
 #include "gpio.h"
-#include "Struct_Para.h"
 
 // clang-format off
-#define DI_NUM          (4)
-
 #define DI_MODE         GPIO_Mode_IN
 #define DI_OTYP         GPIO_OType_OD
 #define DI_PUPD         GPIO_PuPd_UP
 
-#define DI_COUNT        (4)
+#define DI_Press_OK     (0x01)
 
+#define DI_NUM          (3)
 
-#define DI1             PA0
-#define DI2             PA8
-#define DI3             PB7
-#define DI4             PC10
+#define DI_GROUP        ((DI_NUM + 15) >> 4)
+
+#define DI1             PE4
+#define DI2             PE3
+#define DI3             PE2
+
 // clang-format on
 
+typedef struct
+{
+    uint16_t DI_This[DI_GROUP];
+    uint16_t DI_Last[DI_GROUP];
+    void (*_DI_Callbacks)(uint16_t _Index);
+} DI_PARA;
+
+extern DI_PARA DI;
+
 void DI_Init(void);
-void DI_Read(uint16_t *__DI_States);
+void DI_Read(void);
 
 #endif

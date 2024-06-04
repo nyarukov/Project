@@ -28,10 +28,9 @@ typedef struct COM_Config
     Buffer_t RxBuf;
 } COM_Config;
 
-#define UART_WAIT_FOR_TX_COMPLETE(_Id)   while (!(COM_OF(_Id).Port->SR & (1 << 7))) 
+#define UART_WAIT_FOR_TX_COMPLETE(_Id) while (!(COM_OF(_Id).Port->SR & (1 << 7)))
 
-
-#define UART_WAIT_FOR_TX_EMPTY(_Id)      while (!(COM_OF(_Id).Port->SR & (1 << 6)))
+#define UART_WAIT_FOR_TX_EMPTY(_Id) while (!(COM_OF(_Id).Port->SR & (1 << 6)))
 
 #define INIT_CONFIG(PORT, BAUD,                       \
                     TX, RX, RS,                       \
@@ -390,7 +389,6 @@ void COM_Init(void)
         _LOG("--> COM8_Init!\r\n", NULL);
     #endif
     // clang-format on
-
 }
 
 void Rs_485(COM_ID _Id, uint8_t Status)
@@ -484,8 +482,15 @@ void Uart_Proc(COM_ID _Id)
             len > 0)
         {
             USART_ITConfig(USARTx, USART_IT_IDLE, DISABLE);
-            Uart_SendData(_Id, COM_OF(_Id).RxBuf.Buf, len);
 
+            if (_Id == COM2)
+            {
+                Modbus_Slave(COM_OF(_Id).RxBuf.Buf, len);
+            }
+            else
+            {
+                Uart_SendData(_Id, COM_OF(_Id).RxBuf.Buf, len);
+            }
             Buffer_Operation(&COM_OF(_Id).RxBuf,
                              NULL, NULL,
                              BUFFER_CLEAR, 0);

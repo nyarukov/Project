@@ -1,38 +1,38 @@
 /*
- * ��Ŀ����: buffer
- * �汾:1.0
- * ����: Yusaka
- * ��������: 2024-06-01
- * ����޸�����: 2024-06-01 18:09:50
- * ����: ������
+ * 项目名称: buffer
+ * 版本:1.0
+ * 作者: Yusaka
+ * 创建日期: 2024-06-01
+ * 最后修改日期: 2024-06-01 18:09:50
+ * 描述: 缓冲区
  */
 
 #ifndef __BUFFER_H
 #define __BUFFER_H
 
-// ͷ�ļ�����...
+// 头文件内容...
 #include "middle.h"
 
 typedef enum
 {
-    BUFFER_WRITE_BIT,           // ��λΪ��λ�򻺴���д������
-    BUFFER_READ_BIT,            // ��λΪ��λ�ӻ�������ȡ����
-    BUFFER_WRITE_BYTE,          // ���ֽ�Ϊ��λ�򻺴���д������
-    BUFFER_READ_BYTE,           // ���ֽ�Ϊ��λ�ӻ�������ȡ����
-    BUFFER_WRITE_SHORT,         // �Զ�����Ϊ��λ�򻺴���д������
-    BUFFER_READ_SHORT,          // �Զ�����Ϊ��λ�ӻ�������ȡ����
-    BUFFER_WRITE_INT,           // ������Ϊ��λ�򻺴���д������
-    BUFFER_READ_INT,            // ������Ϊ��λ�ӻ�������ȡ����
-    BUFFER_WRITE_LONG,          // �Գ�����Ϊ��λ�򻺴���д������
-    BUFFER_READ_LONG,           // �Գ�����Ϊ��λ�ӻ�������ȡ����
-    BUFFER_SET_SIZE,            // ���û�������С
-    BUFFER_SET_ADDRESS,         // ���û�������ַ
-    BUFFER_CLEAR,               // ��ջ����� 
-    BUFFER_TOTAL_SIZE,          // ��ȡ���������ܴ�С     
-    BUFFER_READ_POINTER,        // ��ȡ�������Ķ�ָ��λ��         
-    BUFFER_WRITE_POINTER,       // ��ȡ��������дָ��λ��         
-    BUFFER_SPACE_LEFT,          // ��ȡ��������ʣ��ռ�Ĵ�С    
-    BUFFER_WRITTEN_COUNT        // ��ȡ�Ѿ�д�뵽�����������ݵ���������λ�ֽ� 
+    BUFFER_WRITE_BIT,           // 以位为单位向缓存区写入数据
+    BUFFER_READ_BIT,            // 以位为单位从缓存区读取数据
+    BUFFER_WRITE_BYTE,          // 以字节为单位向缓存区写入数据
+    BUFFER_READ_BYTE,           // 以字节为单位从缓存区读取数据
+    BUFFER_WRITE_SHORT,         // 以短整型为单位向缓存区写入数据
+    BUFFER_READ_SHORT,          // 以短整型为单位从缓存区读取数据
+    BUFFER_WRITE_INT,           // 以整型为单位向缓存区写入数据
+    BUFFER_READ_INT,            // 以整型为单位从缓存区读取数据
+    BUFFER_WRITE_LONG,          // 以长整型为单位向缓存区写入数据
+    BUFFER_READ_LONG,           // 以长整型为单位从缓存区读取数据
+    BUFFER_SET_SIZE,            // 设置缓存区大小
+    BUFFER_SET_ADDRESS,         // 设置缓存区地址
+    BUFFER_CLEAR,               // 清空缓存区 
+    BUFFER_TOTAL_SIZE,          // 获取缓存区的总大小     
+    BUFFER_READ_POINTER,        // 获取缓存区的读指针位置         
+    BUFFER_WRITE_POINTER,       // 获取缓存区的写指针位置         
+    BUFFER_SPACE_LEFT,          // 获取缓存区中剩余空间的大小    
+    BUFFER_WRITTEN_COUNT        // 获取已经写入到缓存区的数据的数量，单位字节 
 } Buffer_Cmd;
 
 typedef struct

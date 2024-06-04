@@ -6,6 +6,7 @@
 #include "mpu6050.h"
 #include "DI.h"
 #include "Struct_Para.h"
+#include "time.h"
 
 #define Version "STM32F407 V1.0"
 
@@ -16,23 +17,24 @@ uint8_t _val = 0;
 int main(void)
 {
 
-#if (UART_COUNT > 0)
-	COM_Init();
-#endif
-#if DI_NUM > 0
-	DI_Init();
-#endif
-#if (I2C_COUNT > 0)
-	Soft_I2C_Init();
-#endif
-	Soft_I2C_SacnBus(I2C_1);
+	// clang-format off
+	#if (UART_COUNT > 0)
+		COM_Init();
+	#endif
 
-	IO_Init(PF9,
-			GPIO_Mode_OUT, GPIO_OType_PP,
-			GPIO_PuPd_NOPULL, GPIO_Speed_2MHz);
-	IO_Init(PF10,
-			GPIO_Mode_OUT, GPIO_OType_PP,
-			GPIO_PuPd_NOPULL, GPIO_Speed_2MHz);
+	#if DI_NUM > 0
+		DI_Init();
+	#endif
+
+	#if DO_NUM > 0
+		DO_Init();
+	#endif
+
+	#if (I2C_COUNT > 0)
+		Soft_I2C_Init();
+	#endif
+	// clang-format on
+	Soft_I2C_SacnBus(I2C_1);
 
 	_LOG("%s\r\n", Version);
 
@@ -46,9 +48,8 @@ int main(void)
 	while (1)
 	{
 		// I2C_Test();
-		DI_Read(&UserPara.DI_Value);
-		IO_Write(PF9, _val);
-		IO_Write(PF10, _val = ~_val);
+		DI_Read();
+		DO_Proc();
 		Delay_Ms(500);
 	}
 }

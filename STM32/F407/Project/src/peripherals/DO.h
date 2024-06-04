@@ -1,28 +1,44 @@
 /*
- * ÏîÄ¿Ãû³Æ: DO
- * °æ±¾:1.0
- * ×÷Õß: Yusaka
- * ´´½¨ÈÕÆÚ: 2024-06-03 23:11:28
- * ×îºóÐÞ¸ÄÈÕÆÚ: 2024-06-03 23:11:28
- * ÃèÊö: DOÇý¶¯
+ * é¡¹ç›®åç§°: DO
+ * ç‰ˆæœ¬:1.0
+ * ä½œè€…: Yusaka
+ * åˆ›å»ºæ—¥æœŸ: 2024-06-03 23:11:28
+ * æœ€åŽä¿®æ”¹æ—¥æœŸ: 2024-06-03 23:11:28
+ * æè¿°: DOé©±åŠ¨
  */
 
 #ifndef __DO_H
 #define __DO_H
 
-// Í·ÎÄ¼þÄÚÈÝ...
+// å¤´æ–‡ä»¶å†…å®¹...
 
 #include "gpio.h"
-#include "Struct_Para.h"
 
 // clang-format off
-#define DO_MODE     GPIO_Mode_OUT
-#define DO_OTYP     GPIO_OType_PP
-#define DO_SPEED    GPIO_Speed_50MHz
+#define DO_MODE         GPIO_Mode_OUT
+#define DO_OTYP         GPIO_OType_PP
+#define DO_SPEED        GPIO_Speed_50MHz
 
-#define DO_NUM      (2) 
-#define DO1         PA0
-#define DO2         PA1
+
+#define DO_NUM          (2)
+
+#define DO_GROUP        ((DO_NUM + 15) >> 4)
+
+typedef struct
+{
+    uint16_t DO_This[DO_GROUP];
+    uint16_t DO_Last[DO_GROUP];
+} DO_PARA;
+
+extern DO_PARA DO;
+
+
+#define DO1             PF9
+#define DO2             PF10
+
 // clang-format on
+
+void DO_Init(void);
+void DO_Proc(void);
 
 #endif

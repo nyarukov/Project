@@ -14,6 +14,7 @@
 
 #include "gpio.h"
 #include "middle.h"
+#include "modbus_slave.h"
 
 #define DEBUG COM1
 
@@ -37,7 +38,7 @@ typedef enum
 // clang-format off
 
 #define UART1_EN        1
-#define UART2_EN        0
+#define UART2_EN        1
 #define UART3_EN        0
 #define UART4_EN        0
 #define UART5_EN        0
