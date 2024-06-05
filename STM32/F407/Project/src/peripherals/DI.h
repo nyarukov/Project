@@ -23,7 +23,7 @@
 
 #define DI_NUM          (3)
 
-#define DI_GROUP        ((DI_NUM + 15) >> 4)
+#define DI_GROUP        BYTE_COUNT(DI_NUM)
 
 #define DI1             PE4
 #define DI2             PE3
@@ -33,8 +33,8 @@
 
 typedef struct
 {
-    uint16_t DI_This[DI_GROUP];
-    uint16_t DI_Last[DI_GROUP];
+    uint8_t DI_This[DI_GROUP];
+    uint8_t DI_Last[DI_GROUP];
     void (*_DI_Callbacks)(uint16_t _Index);
 } DI_PARA;
 

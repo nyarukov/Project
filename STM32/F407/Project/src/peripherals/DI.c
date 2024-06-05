@@ -224,7 +224,7 @@ void DI_Init(void)
 
 void DI_Read(void)
 {
-    uint16_t *_DI_States = DI.DI_This;
+    uint8_t *_DI_States = DI.DI_This;
     for (size_t i = 0; i < DI_GROUP; i++)
     {
         _DI_States[i] = 0;
@@ -256,28 +256,28 @@ void DI_Read(void)
     #endif
     /***********************************************/
     #if defined(DI9)
-        _DI_States[0] |= READ_DI_PIN(DI9) << 8;
+        _DI_States[0] |= READ_DI_PIN(DI9) << 0;
     #endif
     #if defined(DI10)
-        _DI_States[0] |= READ_DI_PIN(DI10) << 9;
+        _DI_States[0] |= READ_DI_PIN(DI10) << 1;
     #endif
     #if defined(DI11)
-        _DI_States[0] |= READ_DI_PIN(DI11) << 10;
+        _DI_States[0] |= READ_DI_PIN(DI11) << 2;
     #endif
     #if defined(DI12)
-        _DI_States[0] |= READ_DI_PIN(DI12) << 11;
+        _DI_States[0] |= READ_DI_PIN(DI12) << 3;
     #endif
     #if defined(DI13)
-        _DI_States[0] |= READ_DI_PIN(DI13) << 12;
+        _DI_States[0] |= READ_DI_PIN(DI13) << 4;
     #endif
     #if defined(DI14)
-        _DI_States[0] |= READ_DI_PIN(DI14) << 13;
+        _DI_States[0] |= READ_DI_PIN(DI14) << 5;
     #endif
     #if defined(DI15)
-        _DI_States[0] |= READ_DI_PIN(DI15) << 14;
+        _DI_States[0] |= READ_DI_PIN(DI15) << 6;
     #endif
     #if defined(DI16)
-        _DI_States[0] |= READ_DI_PIN(DI16) << 15;
+        _DI_States[0] |= READ_DI_PIN(DI16) << 7;
     #endif
     /***********************************************/
     #if defined(DI17)
@@ -306,28 +306,28 @@ void DI_Read(void)
     #endif
     /***********************************************/
     #if defined(DI25)
-        _DI_States[1]  |= READ_DI_PIN(DI25) << 8;
+        _DI_States[1]  |= READ_DI_PIN(DI25) << 0;
     #endif
     #if defined(DI26)
-        _DI_States[1]  |= READ_DI_PIN(DI26) << 9;
+        _DI_States[1]  |= READ_DI_PIN(DI26) << 1;
     #endif
     #if defined(DI27)
-        _DI_States[1]  |= READ_DI_PIN(DI27) << 10;
+        _DI_States[1]  |= READ_DI_PIN(DI27) << 2;
     #endif
     #if defined(DI28)
-        _DI_States[1]  |= READ_DI_PIN(DI28) << 11;
+        _DI_States[1]  |= READ_DI_PIN(DI28) << 3;
     #endif
     #if defined(DI29)
-        _DI_States[1]  |= READ_DI_PIN(DI29) << 12;
+        _DI_States[1]  |= READ_DI_PIN(DI29) << 4;
     #endif
     #if defined(DI30)
-        _DI_States[1]  |= READ_DI_PIN(DI30) << 13;
+        _DI_States[1]  |= READ_DI_PIN(DI30) << 5;
     #endif
     #if defined(DI31)
-        _DI_States[1]  |= READ_DI_PIN(DI31) << 14;
+        _DI_States[1]  |= READ_DI_PIN(DI31) << 6;
     #endif
     #if defined(DI32)
-        _DI_States[1]  |= READ_DI_PIN(DI32) << 15;
+        _DI_States[1]  |= READ_DI_PIN(DI32) << 7;
     #endif
     /***********************************************/
     #if defined(DI33)
@@ -356,28 +356,28 @@ void DI_Read(void)
     #endif
     /***********************************************/
     #if defined(DI41)
-        _DI_States[2]  |= READ_DI_PIN(DI41) << 8;
+        _DI_States[2]  |= READ_DI_PIN(DI41) << 0;
     #endif
     #if defined(DI42)
-        _DI_States[2]  |= READ_DI_PIN(DI42) << 9;
+        _DI_States[2]  |= READ_DI_PIN(DI42) << 1;
     #endif
     #if defined(DI43)
-        _DI_States[2]  |= READ_DI_PIN(DI43) << 10;
+        _DI_States[2]  |= READ_DI_PIN(DI43) << 2;
     #endif
     #if defined(DI44)
-        _DI_States[2]  |= READ_DI_PIN(DI44) << 11;
+        _DI_States[2]  |= READ_DI_PIN(DI44) << 3;
     #endif
     #if defined(DI45)
-        _DI_States[2]  |= READ_DI_PIN(DI45) << 12;
+        _DI_States[2]  |= READ_DI_PIN(DI45) << 4;
     #endif
     #if defined(DI46)
-        _DI_States[2]  |= READ_DI_PIN(DI46) << 13;
+        _DI_States[2]  |= READ_DI_PIN(DI46) << 5;
     #endif
     #if defined(DI47)
-        _DI_States[2]  |= READ_DI_PIN(DI47) << 14;
+        _DI_States[2]  |= READ_DI_PIN(DI47) << 6;
     #endif
     #if defined(DI48)
-        _DI_States[2]  |= READ_DI_PIN(DI48) << 15;
+        _DI_States[2]  |= READ_DI_PIN(DI48) << 7;
     #endif
     /***********************************************/
     #if defined(DI49)
@@ -406,28 +406,28 @@ void DI_Read(void)
     #endif
     /***********************************************/
     #if defined(DI57)
-        _DI_States[3]   |= READ_DI_PIN(DI57) << 8;
+        _DI_States[3]   |= READ_DI_PIN(DI57) << 0;
     #endif
     #if defined(DI58)
-        _DI_States[3]   |= READ_DI_PIN(DI58) << 9;
+        _DI_States[3]   |= READ_DI_PIN(DI58) << 1;
     #endif
     #if defined(DI59)
-        _DI_States[3]   |= READ_DI_PIN(DI59) << 10;
+        _DI_States[3]   |= READ_DI_PIN(DI59) << 2;
     #endif
     #if defined(DI60)
-        _DI_States[3]   |= READ_DI_PIN(DI60) << 11;
+        _DI_States[3]   |= READ_DI_PIN(DI60) << 3;
     #endif
     #if defined(DI61)
-        _DI_States[3]   |= READ_DI_PIN(DI61) << 11;
+        _DI_States[3]   |= READ_DI_PIN(DI61) << 4;
     #endif
     #if defined(DI62)
-        _DI_States[3]   |= READ_DI_PIN(DI62) << 12;
+        _DI_States[3]   |= READ_DI_PIN(DI62) << 5;
     #endif
     #if defined(DI63)
-        _DI_States[3]   |= READ_DI_PIN(DI63) << 13;
+        _DI_States[3]   |= READ_DI_PIN(DI63) << 6;
     #endif
     #if defined(DI64)
-        _DI_States[3]   |= READ_DI_PIN(DI64) << 14;
+        _DI_States[3]   |= READ_DI_PIN(DI64) << 7;
     #endif
     for (size_t i = 0; i < DI_GROUP; i++)
     {

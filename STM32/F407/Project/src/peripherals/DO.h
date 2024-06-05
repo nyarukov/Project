@@ -22,12 +22,12 @@
 
 #define DO_NUM          (2)
 
-#define DO_GROUP        ((DO_NUM + 15) >> 4)
+#define DO_GROUP        BYTE_COUNT(DO_NUM)
 
 typedef struct
 {
-    uint16_t DO_This[DO_GROUP];
-    uint16_t DO_Last[DO_GROUP];
+    uint8_t DO_This[DO_GROUP];
+    uint8_t DO_Last[DO_GROUP];
 } DO_PARA;
 
 extern DO_PARA DO;

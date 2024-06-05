@@ -15,21 +15,20 @@
 #include "middle.h"
 #include "uart.h"
 #include "DI.h"
+#include "DO.h"
 
 // clang-format off
-#define MODBUS_ADDRESS          1
+#define MODBUS_ADDRESS              1
 
+#define MODEBUS_RX_BUFSIZE          128
+
+#define Input_Reg_Count             16
+#define Holding_Reg_Count           16
+
+extern uint8_t Input_Registers[Input_Reg_Count];            // 输入寄存器
+extern uint8_t Holding_Registers[Holding_Reg_Count];        // 保持寄存器
 // clang-format on
 
-typedef struct
-{
-    uint16_t reg_addr;
-    uint16_t reg_count;
-    uint16_t reg_val;
-    uint16_t crc;
-    uint8_t reg_length;
-    uint8_t buffer[128];
-} Modbus_Slave_t;
+Status Modbus_Slave(uint8_t *_pBuf, uint16_t _Len);
 
-void Modbus_Slave(uint8_t *_pBuf, uint16_t _Len);
 #endif

@@ -234,203 +234,203 @@ void DO_Proc(void)
             DO.DO_Last[i] = DO.DO_This[i];
             
             #if defined(DO1)
-                DO_WRITE(DO1, DO.DO_This[0] & 0x0001);
+                DO_WRITE(DO1, DO.DO_This[0] & 0x01);
             #endif
             #if defined(DO2)
-                DO_WRITE(DO2, DO.DO_This[0] & 0x0002);
+                DO_WRITE(DO2, DO.DO_This[0] & 0x02);
             #endif
             #if defined(DO3)
-                DO_WRITE(DO3, DO.DO_This[0] & 0x0004);
+                DO_WRITE(DO3, DO.DO_This[0] & 0x04);
             #endif
             #if defined(DO4)
-                DO_WRITE(DO4, DO.DO_This[0] & 0x0008);
+                DO_WRITE(DO4, DO.DO_This[0] & 0x08);
             #endif
             #if defined(DO5)
-                DO_WRITE(DO5, DO.DO_This[0] & 0x0008);
+                DO_WRITE(DO5, DO.DO_This[0] & 0x10);
             #endif
             #if defined(DO6)
-                DO_WRITE(DO6, DO.DO_This[0] & 0x0020);
+                DO_WRITE(DO6, DO.DO_This[0] & 0x20);
             #endif
             #if defined(DO7)
-                DO_WRITE(DO7, DO.DO_This[0] & 0x0040);
+                DO_WRITE(DO7, DO.DO_This[0] & 0x40);
             #endif
             #if defined(DO8)
-                DO_WRITE(DO8, DO.DO_This[0] & 0x0080);
+                DO_WRITE(DO8, DO.DO_This[0] & 0x80);
             #endif
             /***********************************************/
             #if defined(DO9)
-                DO_WRITE(DO9, DO.DO_This[0] & 0x0100);
+                DO_WRITE(DO9, DO.DO_This[0] & 0x01);
             #endif
             #if defined(DO10)
-                DO_WRITE(DO10, DO.DO_This[0] & 0x0200);
+                DO_WRITE(DO10, DO.DO_This[0] & 0x02);
             #endif
             #if defined(DO11)
-                DO_WRITE(DO11, DO.DO_This[0] & 0x0400);
+                DO_WRITE(DO11, DO.DO_This[0] & 0x04);;
             #endif
             #if defined(DO12)
-                DO_WRITE(DO12, DO.DO_This[0] & 0x0800);
+                DO_WRITE(DO12, DO.DO_This[0] & 0x08);
             #endif
             #if defined(DO13)
-                DO_WRITE(DO13, DO.DO_This[0] & 0x1000);
+                DO_WRITE(DO13, DO.DO_This[0] & 0x10);
             #endif
             #if defined(DO14)
-                DO_WRITE(DO14, DO.DO_This[0] & 0x2000);
+                DO_WRITE(DO14, DO.DO_This[0] & 0x20);
             #endif
             #if defined(DO15)
-                DO_WRITE(DO15, DO.DO_This[0] & 0x4000);
+                DO_WRITE(DO15, DO.DO_This[0] & 0x40);
             #endif
             #if defined(DO16)
-                DO_WRITE(DO16, DO.DO_This[0] & 0x8000);
+                DO_WRITE(DO16, DO.DO_This[0] & 0x80);
             #endif
             /***********************************************/
             #if defined(DO17)
-                DO_WRITE(DO17, DO.DO_This[1] & 0x0001);
+                DO_WRITE(DO17, DO.DO_This[1] & 0x01);
             #endif
             #if defined(DO18)
-                DO_WRITE(DO18, DO.DO_This[1] & 0x0002);
+                DO_WRITE(DO18, DO.DO_This[1] & 0x02);
             #endif
             #if defined(DO19)
-                DO_WRITE(DO19, DO.DO_This[1] & 0x0004);
+                DO_WRITE(DO19, DO.DO_This[1] & 0x04);
             #endif
             #if defined(DO20)
-                DO_WRITE(DO20, DO.DO_This[1] & 0x0008);
+                DO_WRITE(DO20, DO.DO_This[1] & 0x08);
             #endif
             #if defined(DO21)
-                DO_WRITE(DO21, DO.DO_This[1] & 0x0008);
+                DO_WRITE(DO21, DO.DO_This[1] & 0x10);
             #endif
             #if defined(DO22)
-                DO_WRITE(DO22, DO.DO_This[1] & 0x0020);
+                DO_WRITE(DO22, DO.DO_This[1] & 0x20);
             #endif
             #if defined(DO23)
-                DO_WRITE(DO23, DO.DO_This[1] & 0x0040);
+                DO_WRITE(DO23, DO.DO_This[1] & 0x40);
             #endif
             #if defined(DO24)
-                DO_WRITE(DO24, DO.DO_This[1] & 0x0080);
+                DO_WRITE(DO24, DO.DO_This[1] & 0x80);
             #endif
             /***********************************************/
             #if defined(DO25)
-                DO_WRITE(DO25, DO.DO_This[1] & 0x0100);
+                DO_WRITE(DO25, DO.DO_This[1] & 0x01);
             #endif
             #if defined(DO26)
-                DO_WRITE(DO26, DO.DO_This[1] & 0x0200);
+                DO_WRITE(DO26, DO.DO_This[1] & 0x02);
             #endif
             #if defined(DO27)
-                DO_WRITE(DO27, DO.DO_This[1] & 0x0400);
+                DO_WRITE(DO27, DO.DO_This[1] & 0x04);
             #endif
             #if defined(DO28)
-                DO_WRITE(DO28, DO.DO_This[1] & 0x0800);
+                DO_WRITE(DO28, DO.DO_This[1] & 0x08);
             #endif
             #if defined(DO29)
-                DO_WRITE(DO29, DO.DO_This[1] & 0x1000);
+                DO_WRITE(DO29, DO.DO_This[1] & 0x10);
             #endif
             #if defined(DO30)
-                DO_WRITE(DO30, DO.DO_This[1] & 0x2000);
+                DO_WRITE(DO30, DO.DO_This[1] & 0x20);
             #endif
             #if defined(DO31)
-                DO_WRITE(DO31, DO.DO_This[1] & 0x4000);
+                DO_WRITE(DO31, DO.DO_This[1] & 0x40);
             #endif
             #if defined(DO32)
-                DO_WRITE(DO32, DO.DO_This[1] & 0x8000);
+                DO_WRITE(DO32, DO.DO_This[1] & 0x80);
             #endif
             /***********************************************/
             #if defined(DO33)
-                DO_WRITE(DO33, DO.DO_This[2] & 0x0001);
+                DO_WRITE(DO33, DO.DO_This[2] & 0x01);
             #endif
             #if defined(DO34)
-                DO_WRITE(DO34, DO.DO_This[2] & 0x0002);
+                DO_WRITE(DO34, DO.DO_This[2] & 0x02);
             #endif
             #if defined(DO35)
-                DO_WRITE(DO35, DO.DO_This[2] & 0x0004);
+                DO_WRITE(DO35, DO.DO_This[2] & 0x04);
             #endif
             #if defined(DO36)
-                DO_WRITE(DO36, DO.DO_This[2] & 0x0008);
+                DO_WRITE(DO36, DO.DO_This[2] & 0x08);
             #endif
             #if defined(DO37)
-                DO_WRITE(DO37, DO.DO_This[2] & 0x0010);
+                DO_WRITE(DO37, DO.DO_This[2] & 0x10);
             #endif
             #if defined(DO38)
-                DO_WRITE(DO38, DO.DO_This[2] & 0x0020);
+                DO_WRITE(DO38, DO.DO_This[2] & 0x20);
             #endif
             #if defined(DO39)
-                DO_WRITE(DO39, DO.DO_This[2] & 0x0040);
+                DO_WRITE(DO39, DO.DO_This[2] & 0x40);
             #endif
             #if defined(DO40)
-                DO_WRITE(DO40, DO.DO_This[2] & 0x0080);
+                DO_WRITE(DO40, DO.DO_This[2] & 0x80);
             #endif
             /***********************************************/
             #if defined(DO41)
-                DO_WRITE(DO41, DO.DO_This[2] & 0x0100);
+                DO_WRITE(DO41, DO.DO_This[2] & 0x01);
             #endif
             #if defined(DO42)
-                DO_WRITE(DO42, DO.DO_This[2] & 0x0200);
+                DO_WRITE(DO42, DO.DO_This[2] & 0x02);
             #endif
             #if defined(DO43)
-                DO_WRITE(DO43, DO.DO_This[2] & 0x0400);
+                DO_WRITE(DO43, DO.DO_This[2] & 0x04);
             #endif
             #if defined(DO44)
-                DO_WRITE(DO44, DO.DO_This[2] & 0x0800);
+                DO_WRITE(DO44, DO.DO_This[2] & 0x08);
             #endif
             #if defined(DO45)
-                DO_WRITE(DO45, DO.DO_This[2] & 0x1000);
+                DO_WRITE(DO45, DO.DO_This[2] & 0x10);
             #endif
             #if defined(DO46)
-                DO_WRITE(DO46, DO.DO_This[2] & 0x2000);
+                DO_WRITE(DO46, DO.DO_This[2] & 0x20);
             #endif
             #if defined(DO47)
-                DO_WRITE(DO47, DO.DO_This[2] & 0x4000);
+                DO_WRITE(DO47, DO.DO_This[2] & 0x40);
             #endif
             #if defined(DO48)
-                DO_WRITE(DO48, DO.DO_This[2] & 0x8000);
+                DO_WRITE(DO48, DO.DO_This[2] & 0x80);
             #endif
             /***********************************************/
             #if defined(DO49)
-                DO_WRITE(DO49, DO.DO_This[3] & 0x0001);
+                DO_WRITE(DO49, DO.DO_This[3] & 0x01);
             #endif
             #if defined(DO50)
-                DO_WRITE(DO50, DO.DO_This[3] & 0x0002);
+                DO_WRITE(DO50, DO.DO_This[3] & 0x02);
             #endif
             #if defined(DO51)
-                DO_WRITE(DO51, DO.DO_This[3] & 0x0004);
+                DO_WRITE(DO51, DO.DO_This[3] & 0x04);
             #endif
             #if defined(DO52)
-                DO_WRITE(DO52, DO.DO_This[3] & 0x0008);
+                DO_WRITE(DO52, DO.DO_This[3] & 0x08);
             #endif
             #if defined(DO53)
-                DO_WRITE(DO53, DO.DO_This[3] & 0x0010);
+                DO_WRITE(DO53, DO.DO_This[3] & 0x10);
             #endif
             #if defined(DO54)
-                DO_WRITE(DO54, DO.DO_This[3] & 0x0020);
+                DO_WRITE(DO54, DO.DO_This[3] & 0x20);
             #endif
             #if defined(DO55)
-                DO_WRITE(DO55, DO.DO_This[3] & 0x0040);
+                DO_WRITE(DO55, DO.DO_This[3] & 0x40);
             #endif
             #if defined(DO56)
-                DO_WRITE(DO56, DO.DO_This[3] & 0x0080);
+                DO_WRITE(DO56, DO.DO_This[3] & 0x80);
             #endif
             /***********************************************/
             #if defined(DO57)
-                DO_WRITE(DO57, DO.DO_This[3] & 0x0100);
+                DO_WRITE(DO57, DO.DO_This[3] & 0x01);
             #endif
             #if defined(DO58)
-                DO_WRITE(DO58, DO.DO_This[3] & 0x0200);
+                DO_WRITE(DO58, DO.DO_This[3] & 0x02);
             #endif
             #if defined(DO59)
-                DO_WRITE(DO59, DO.DO_This[3] & 0x0400);
+                DO_WRITE(DO59, DO.DO_This[3] & 0x04);
             #endif
             #if defined(DO60)
-                DO_WRITE(DO60, DO.DO_This[3] & 0x0800);
+                DO_WRITE(DO60, DO.DO_This[3] & 0x08);
             #endif
             #if defined(DO61)
-                DO_WRITE(DO61, DO.DO_This[3] & 0x1000);
+                DO_WRITE(DO61, DO.DO_This[3] & 0x10);
             #endif
             #if defined(DO62)
-                DO_WRITE(DO62, DO.DO_This[3] & 0x2000);
+                DO_WRITE(DO62, DO.DO_This[3] & 0x20);
             #endif
             #if defined(DO63)
-                DO_WRITE(DO63, DO.DO_This[3] & 0x4000);
+                DO_WRITE(DO63, DO.DO_This[3] & 0x40);
             #endif
             #if defined(DO64)
-                DO_WRITE(DO64, DO.DO_This[3] & 0x8000);
+                DO_WRITE(DO64, DO.DO_This[3] & 0x80);
             #endif
         }
     }

@@ -11,38 +11,43 @@
 
 // C 文件内容...
 
-Modbus_Slave_t Ms_Response;
-
-static void Modbus_AnalyzeApp(uint8_t *_pBuf);
-
-static void Modbus_Error(uint8_t *_pBuf);
-static void Modbus_SendData(uint16_t dataLength);
-
-static void Modbus_01H(uint8_t *_pBuf);
-static void Modbus_02H(uint8_t *_pBuf);
-static void Modbus_03H(uint8_t *_pBuf);
-static void Modbus_04H(uint8_t *_pBuf);
-static void Modbus_05H(uint8_t *_pBuf);
-static void Modbus_06H(uint8_t *_pBuf);
-static void Modbus_10H(uint8_t *_pBuf);
-
-void Modbus_Slave(uint8_t *_pBuf, uint16_t _Len)
+typedef struct
 {
-    uint16_t crc;
-    uint16_t receivecrc;
-    if (_pBuf[0] != MODBUS_ADDRESS)
-    {
-        return;
-    }
-    crc = Check_Modbus_CRC16(_pBuf, _Len - 2);
-    receivecrc = (_pBuf[_Len - 1] << 8) | (_pBuf[_Len - 2]);
-    if (crc == receivecrc)
-        Modbus_AnalyzeApp(_pBuf);
-    else
-        Modbus_Error(_pBuf);
-}
+    uint16_t Addr;
+    uint16_t Count;
+    uint8_t Len;
+    uint8_t Buf[MODEBUS_RX_BUFSIZE];
+} Modbus_Slave_t;
 
-static void Modbus_Error(uint8_t *_pBuf)
+Modbus_Slave_t MS;
+
+// clang-format off
+#define MODBUS_READ_COILS                   0x01    // 读取线圈状态（读取开关量输入状态）
+#define MODBUS_READ_DISCRETE_INPUTS         0x02    // 读取输入状态（读取开关量输出状态）
+#define MODBUS_READ_HOLDING_REGISTERS       0x03    // 读取保持寄存器（读取存储的数据）
+#define MODBUS_READ_INPUT_REGISTERS         0x04    // 读取输入寄存器（读取存储的数据）
+#define MODBUS_WRITE_SINGLE_COIL            0x05    // 强制单线圈（控制开关量输出）
+#define MODBUS_WRITE_SINGLE_REGISTER        0x06    // 写单个保持寄存器（控制存储的数据）
+#define MODBUS_WRITE_MULTIPLE_REGISTERS     0x10    // 写多个保持寄存器（控制存储的数据）
+
+
+#define ILLEGAL_FUNCTION                    0x01    // 非法功能码
+#define ILLEGAL_DATA_ADDRESS                0x02    // 非法数据地址
+#define ILLEGAL_DATA_VALUE                  0x03    // 非法数据值
+#define SLAVE_DEVICE_FAILURE                0x04    // 从机故障
+#define ACKNOWLEDGE                         0x05    // 确认
+#define SLAVE_DEVICE_BUSY                   0x06    // 从机忙
+#define NEGATIVE_ACKNOWLEDGE                0x07    // 否定确认
+#define PARITY_ERROR                        0x08    // 存储奇偶性差错
+
+
+
+uint8_t Input_Registers[Input_Reg_Count];
+uint8_t Holding_Registers[Holding_Reg_Count];
+
+// clang-format on
+
+static Status Modbus_Error(uint8_t *_pBuf)
 {
     uint16_t crc;
     uint8_t sendbuff[5];
@@ -53,47 +58,18 @@ static void Modbus_Error(uint8_t *_pBuf)
     sendbuff[3] = (uint8_t)(crc >> 8);     // CRC 校验值高位
     sendbuff[4] = (uint8_t)crc;            // CRC 校验值低位
     Uart_SendData(COM2, sendbuff, 5);      // 发送异常响应数据
+
+    return BF_ERROR;
 }
 
-static void Modbus_SendData(uint16_t dataLength)
+static void Modbus_SendData(uint16_t _Len)
 {
-    Ms_Response.crc = Check_Modbus_CRC16(Ms_Response.buffer, dataLength);
+    uint16_t _CRC = Check_Modbus_CRC16(MS.Buf, _Len);
 
-    Ms_Response.buffer[dataLength] = LOW_BYTE(Ms_Response.crc);
-    Ms_Response.buffer[dataLength + 1] = HIGH_BYTE(Ms_Response.crc);
+    MS.Buf[_Len] = LOW_BYTE(_CRC);
+    MS.Buf[_Len + 1] = HIGH_BYTE(_CRC);
 
-    Uart_SendData(COM2, Ms_Response.buffer, dataLength + 2);
-}
-
-static void Modbus_AnalyzeApp(uint8_t *_pBuf)
-{
-    switch (_pBuf[1])
-    {
-    case 0x01: // 读取线圈状态（读取开关量输入状态）
-        Modbus_01H(_pBuf);
-        break;
-    case 0x02: // 读取输入状态（读取开关量输出状态）
-        Modbus_02H(_pBuf);
-        break;
-    case 0x03: // 读取保持寄存器（读取存储的数据）
-        Modbus_03H(_pBuf);
-        break;
-    case 0x04: // 读取输入寄存器（读取存储的数据）
-        Modbus_04H(_pBuf);
-        break;
-    case 0x05: // 强制单线圈（控制开关量输出）
-        Modbus_05H(_pBuf);
-        break;
-    case 0x06: // 写单个保持寄存器（控制存储的数据）
-        Modbus_06H(_pBuf);
-        break;
-    case 0x10: // 写多个保持寄存器（控制存储的数据）
-        Modbus_10H(_pBuf);
-        break;
-    default:
-        Modbus_Error(_pBuf);
-        break;
-    }
+    Uart_SendData(COM2, MS.Buf, _Len + 2);
 }
 
 // 读取线圈状态（读取开关量输入状态）
@@ -123,25 +99,18 @@ void Modbus_01H(uint8_t *_pBuf)
             E6 CRC校验低字节
     */
 
-    mem_set((char *)&Ms_Response, 0, sizeof(Modbus_Slave_t));
-    Ms_Response.reg_addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
-    Ms_Response.reg_count = LEBufToUint16(_pBuf[4], _pBuf[5]);
+    MS.Addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
+    MS.Count = LEBufToUint16(_pBuf[4], _pBuf[5]);
 
-    Ms_Response.reg_length = (Ms_Response.reg_count + 7) >> 3;
+    MS.Len = BYTE_COUNT(MS.Count);
 
-    Ms_Response.buffer[0] = _pBuf[0];
-    Ms_Response.buffer[1] = _pBuf[1];
-    Ms_Response.buffer[2] = Ms_Response.reg_length;
+    MS.Buf[0] = _pBuf[0];
+    MS.Buf[1] = _pBuf[1];
+    MS.Buf[2] = MS.Len;
 
-    uint8_t i;
-    for (i = 0; i < Ms_Response.reg_count; i++)
-    {
-        // Ms_Response.reg_val = Modbus_01H_Callback(Ms_Response.reg_addr + i);
-        Ms_Response.reg_val = DI.DI_This[i % 8];
-        Ms_Response.buffer[3 + (i >> 3)] |= (LOW_BYTE(Ms_Response.reg_val) << (i % 8));
-    }
+    mem_cpy(&MS.Buf[3], &DO.DO_This[MS.Addr], MS.Len);
 
-    Modbus_SendData(3 + Ms_Response.reg_length);
+    Modbus_SendData(3 + MS.Len);
 }
 
 // 读取离散输入状态（读取开关量输出状态）
@@ -171,24 +140,19 @@ void Modbus_02H(uint8_t *_pBuf)
         20 CRC校验高字节
         18 CRC校验低字节
     */
-    mem_set((char *)&Ms_Response, 0, sizeof(Modbus_Slave_t));
-    Ms_Response.reg_addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
-    Ms_Response.reg_count = LEBufToUint16(_pBuf[4], _pBuf[5]);
 
-    Ms_Response.reg_length = (Ms_Response.reg_count + 7) >> 3;
+    MS.Addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
+    MS.Count = LEBufToUint16(_pBuf[4], _pBuf[5]);
 
-    Ms_Response.buffer[0] = _pBuf[0];
-    Ms_Response.buffer[1] = _pBuf[1];
-    Ms_Response.buffer[2] = Ms_Response.reg_length;
+    MS.Len = BYTE_COUNT(MS.Count);
 
-    uint8_t i;
-    for (i = 0; i < Ms_Response.reg_count; i++)
-    {
-        // Ms_Response.reg_val = Modbus_02H_Callback(Ms_Response.reg_addr + i);
-        Ms_Response.reg_val =
-            Ms_Response.buffer[3 + (i >> 3)] |= (LOW_BYTE(Ms_Response.reg_val) << (i % 8));
-    }
-    Modbus_SendData(3 + Ms_Response.reg_length);
+    MS.Buf[0] = _pBuf[0];
+    MS.Buf[1] = _pBuf[1];
+    MS.Buf[2] = MS.Len;
+
+    mem_cpy(&MS.Buf[3], &DI.DI_This[MS.Addr], MS.Len);
+
+    Modbus_SendData(3 + MS.Len);
 }
 
 // 读取保持寄存器（读取存储的数据）
@@ -219,25 +183,17 @@ void Modbus_03H(uint8_t *_pBuf)
             38 CRC高字节
             B9 CRC低字节
     */
+    MS.Addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
+    MS.Count = LEBufToUint16(_pBuf[4], _pBuf[5]);
+    MS.Len = MS.Count << 1;
 
-    mem_set((char *)&Ms_Response, 0, sizeof(Modbus_Slave_t));
-    Ms_Response.reg_addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
-    Ms_Response.reg_count = LEBufToUint16(_pBuf[4], _pBuf[5]);
-    Ms_Response.reg_length = Ms_Response.reg_count << 1;
+    MS.Buf[0] = _pBuf[0];
+    MS.Buf[1] = _pBuf[1];
+    MS.Buf[2] = MS.Len;
 
-    Ms_Response.buffer[0] = _pBuf[0];
-    Ms_Response.buffer[1] = _pBuf[1];
-    Ms_Response.buffer[2] = Ms_Response.reg_length;
+    mem_cpy(&MS.Buf[3], &Holding_Registers[MS.Addr], MS.Len);
 
-    uint8_t i;
-    for (i = 0; i < Ms_Response.reg_count; i++)
-    {
-        // Ms_Response.reg_val = Modbus_03H_Callback(Ms_Response.reg_addr + (i << 1));
-        Ms_Response.buffer[3 + (i << 1)] = HIGH_BYTE(Ms_Response.reg_val);
-        Ms_Response.buffer[4 + (i << 1)] = LOW_BYTE(Ms_Response.reg_val);
-    }
-
-    Modbus_SendData(3 + Ms_Response.reg_length);
+    Modbus_SendData(3 + MS.Len);
 }
 
 // 读取输入寄存器（读取存储的数据）
@@ -266,23 +222,17 @@ void Modbus_04H(uint8_t *_pBuf)
             8B CRC高字节
             80 CRC低字节
     */
-    mem_set((char *)&Ms_Response, 0, sizeof(Modbus_Slave_t));
-    Ms_Response.reg_addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
-    Ms_Response.reg_count = LEBufToUint16(_pBuf[4], _pBuf[5]);
-    Ms_Response.reg_length = Ms_Response.reg_count << 1;
+    MS.Addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
+    MS.Count = LEBufToUint16(_pBuf[4], _pBuf[5]);
+    MS.Len = MS.Count << 1;
 
-    Ms_Response.buffer[0] = _pBuf[0];
-    Ms_Response.buffer[1] = _pBuf[1];
-    Ms_Response.buffer[2] = Ms_Response.reg_length;
+    MS.Buf[0] = _pBuf[0];
+    MS.Buf[1] = _pBuf[1];
+    MS.Buf[2] = MS.Len;
 
-    uint8_t i;
-    for (i = 0; i < Ms_Response.reg_count; i++)
-    {
-        // Ms_Response.reg_val = Modbus_04H_Callback(Ms_Response.reg_addr + (i << 1));
-        Ms_Response.buffer[3 + (i << 1)] = HIGH_BYTE(Ms_Response.reg_val);
-        Ms_Response.buffer[4 + (i << 1)] = LOW_BYTE(Ms_Response.reg_val);
-    }
-    Modbus_SendData(3 + Ms_Response.reg_length);
+    mem_cpy(&MS.Buf[3], &Input_Registers[MS.Addr], MS.Len);
+
+    Modbus_SendData(3 + MS.Len);
 }
 
 // 写单个输出线圈（控制开关量输出）
@@ -309,13 +259,19 @@ void Modbus_05H(uint8_t *_pBuf)
             4E CRC校验高字节
             8B CRC校验低字节
     */
-    mem_set((char *)&Ms_Response, 0, sizeof(Modbus_Slave_t));
-    Ms_Response.reg_addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
-    Ms_Response.reg_val = LEBufToUint16(_pBuf[4], _pBuf[5]);
+    MS.Addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
 
-    mem_cpy(Ms_Response.buffer, _pBuf, 6);
+    if (_pBuf[4] & 0x01)
+    {
+        DO.DO_This[MS.Addr >> 3] |= (1 << (MS.Addr % 8));
+    }
+    else
+    {
+        DO.DO_This[MS.Addr >> 3] &= ~(1 << (MS.Addr % 8));
+    }
 
-    // Modbus_05H_Callback(Ms_Response.reg_addr, Ms_Response.reg_val);
+    mem_cpy(&MS.Buf[0], &_pBuf[0], 6);
+
     Modbus_SendData(6);
 }
 
@@ -343,12 +299,12 @@ void Modbus_06H(uint8_t *_pBuf)
             1B CRC校验高字节
             5A	CRC校验低字节
     */
-    Ms_Response.reg_addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
-    Ms_Response.reg_val = LEBufToUint16(_pBuf[4], _pBuf[5]);
+    MS.Addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
+    
+    mem_cpy(&Holding_Registers[MS.Addr << 1], &_pBuf[4], 2);
 
-    mem_cpy(Ms_Response.buffer, _pBuf, 6);
+    mem_cpy(&MS.Buf[0], &_pBuf[0], 6);
 
-    // Modbus_06H_Callback(Ms_Response.reg_addr, Ms_Response.reg_val);
     Modbus_SendData(6);
 }
 
@@ -382,18 +338,57 @@ void Modbus_10H(uint8_t *_pBuf)
             5A	CRC校验低字节
     */
 
-    Ms_Response.reg_addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
-    Ms_Response.reg_count = LEBufToUint16(_pBuf[4], _pBuf[5]);
+    MS.Addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
+    MS.Count = LEBufToUint16(_pBuf[4], _pBuf[5]);
 
-    Ms_Response.reg_length = Ms_Response.reg_count << 1;
+    mem_cpy(&Holding_Registers[MS.Addr << 1], &_pBuf[7], _pBuf[6]);
 
-    mem_cpy(Ms_Response.buffer, _pBuf, 6);
+    mem_cpy(&MS.Buf[0], &_pBuf[0], 6);
 
-    uint8_t i;
-    for (i = 0; i < Ms_Response.reg_count; i++)
-    {
-        Ms_Response.reg_val = LEBufToUint16(_pBuf[7 + (i << 1)], _pBuf[8 + (i << 1)]);
-        // Modbus_10H_Callback(Ms_Response.reg_addr + (i << 1), Ms_Response.reg_val);
-    }
     Modbus_SendData(6);
+}
+
+Status Modbus_Slave(uint8_t *_pBuf, uint16_t _Len)
+{
+    if (_pBuf[0] != MODBUS_ADDRESS)
+    {
+        return BF_ERROR;
+    }
+
+    if (LEBufToUint16(_pBuf[_Len - 1], _pBuf[_Len - 2]) != Check_Modbus_CRC16(_pBuf, _Len - 2))
+    {
+        return Modbus_Error(_pBuf);
+    }
+    else
+    {
+        mem_set((char *)&MS, 0, sizeof(Modbus_Slave_t));
+
+        switch (_pBuf[1])
+        {
+        case MODBUS_READ_COILS:
+            Modbus_01H(_pBuf);
+            break;
+        case MODBUS_READ_DISCRETE_INPUTS:
+            Modbus_02H(_pBuf);
+            break;
+        case MODBUS_READ_HOLDING_REGISTERS:
+            Modbus_03H(_pBuf);
+            break;
+        case MODBUS_READ_INPUT_REGISTERS:
+            Modbus_04H(_pBuf);
+            break;
+        case MODBUS_WRITE_SINGLE_COIL:
+            Modbus_05H(_pBuf);
+            break;
+        case MODBUS_WRITE_SINGLE_REGISTER:
+            Modbus_06H(_pBuf);
+            break;
+        case MODBUS_WRITE_MULTIPLE_REGISTERS:
+            Modbus_10H(_pBuf);
+            break;
+        default:
+            Modbus_Error(_pBuf);
+            break;
+        }
+    }
 }
