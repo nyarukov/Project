@@ -50,9 +50,6 @@
                 "path": "../../libs/stm32_lib/src/stm32f4xx_crc.c"
               },
               {
-                "path": "../../libs/stm32_lib/src/stm32f4xx_cryp.c"
-              },
-              {
                 "path": "../../libs/stm32_lib/src/stm32f4xx_cryp_aes.c"
               },
               {
@@ -60,6 +57,9 @@
               },
               {
                 "path": "../../libs/stm32_lib/src/stm32f4xx_cryp_tdes.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_cryp.c"
               },
               {
                 "path": "../../libs/stm32_lib/src/stm32f4xx_dac.c"
@@ -80,10 +80,10 @@
                 "path": "../../libs/stm32_lib/src/stm32f4xx_exti.c"
               },
               {
-                "path": "../../libs/stm32_lib/src/stm32f4xx_flash.c"
+                "path": "../../libs/stm32_lib/src/stm32f4xx_flash_ramfunc.c"
               },
               {
-                "path": "../../libs/stm32_lib/src/stm32f4xx_flash_ramfunc.c"
+                "path": "../../libs/stm32_lib/src/stm32f4xx_flash.c"
               },
               {
                 "path": "../../libs/stm32_lib/src/stm32f4xx_fsmc.c"
@@ -92,13 +92,13 @@
                 "path": "../../libs/stm32_lib/src/stm32f4xx_gpio.c"
               },
               {
-                "path": "../../libs/stm32_lib/src/stm32f4xx_hash.c"
-              },
-              {
                 "path": "../../libs/stm32_lib/src/stm32f4xx_hash_md5.c"
               },
               {
                 "path": "../../libs/stm32_lib/src/stm32f4xx_hash_sha1.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_hash.c"
               },
               {
                 "path": "../../libs/stm32_lib/src/stm32f4xx_i2c.c"
@@ -194,10 +194,19 @@
             "name": "peripherals",
             "files": [
               {
+                "path": "../../src/peripherals/Basic_Tim.c"
+              },
+              {
+                "path": "../../src/peripherals/Data_Proc.c"
+              },
+              {
                 "path": "../../src/peripherals/DI.c"
               },
               {
                 "path": "../../src/peripherals/DO.c"
+              },
+              {
+                "path": "../../src/peripherals/InputCap_Tim.c"
               },
               {
                 "path": "../../src/peripherals/main.c"
@@ -210,6 +219,12 @@
               },
               {
                 "path": "../../src/peripherals/oled_menu.c"
+              },
+              {
+                "path": "../../src/peripherals/OutputCompare_Tim.c"
+              },
+              {
+                "path": "../../src/peripherals/Pwm_Tim.c"
               },
               {
                 "path": "../../src/peripherals/Struct_Para.c"

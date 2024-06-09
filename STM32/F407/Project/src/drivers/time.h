@@ -1,16 +1,18 @@
 /*
- * ��Ŀ����: time
- * �汾:1.0
- * ����: Yusaka
- * ��������: 2024-06-01
- * ����޸�����: 2024-06-01 18:09:50
- * ����: ��ʱ������
+ * 项目名称: time
+ * 版本:1.0
+ * 作者: Yusaka
+ * 创建日期: 2024-06-01
+ * 最后修改日期: 2024-06-01 18:09:50
+ * 描述: 定时器驱动
  */
 
 #ifndef __TIME_H
 #define __TIME_H
 
-// ͷ�ļ�����...
+// 头文件内容...
+
+#include "middle.h"
 
 typedef enum
 {
@@ -24,72 +26,106 @@ typedef enum
     TIM_8,
     TIM_9,
     TIM_10,
+    TIM_11,
+    TIM_12,
+    TIM_13,
+    TIM_14
 } TIM_ID;
 
-// clang-format off
-#define TIM1_EN         1
-#define TIM2_EN         1
-#define TIM3_EN         1
-#define TIM4_EN         1
-#define TIM5_EN         1
-#define TIM6_EN         1
-#define TIM7_EN         1
-#define TIM8_EN         1
-#define TIM9_EN         1
-#define TIM10_EN        1
+typedef enum
+{
+    TIMER_MODE_BASIC = 0,
+    TIMER_MODE_PWM,
+    TIMER_MODE_INPUT_CAPTURE,
+    TIMER_MODE_OUTPUT_COMPARE,
+    TIMER_MODE_ENCODER,
+    TIMER_MODE_WATCHDOG,
+    TIMER_MODE_RTC
+} TIMER_Mode;
+// 基本配置
+typedef struct
+{
+    TIM_ID ID;               // 定时器ID
+    uint8_t Mode;            // 定时器模式(PWM,输入捕获,输出比较,编码器接口,看门狗,RTC,低功耗,中断和DMA)
+    uint8_t interruptEnable; // 中断使能
+    uint8_t dmaEnable;       // DMA 使能
+    uint32_t prescaler;      // 预分频器值
+    uint32_t counterMode;    // 计数模式（向上、向下、中心对齐）
+    uint32_t period;         // 自动重装载值
+    uint32_t clockDivision;  // 时钟分频
+    uint32_t dmaRequest;     // DMA 请求源
+} TIMRE_Config;
 
-#if TIM1_EN == 1
-// #ifdef TIM1_EN
-//     #error  "This is a custom warning message."
-// #endif
+// PWM 配置
+typedef struct
+{
+    uint32_t pulse;     // PWM 脉冲宽度
+    uint32_t polarity;  // PWM 极性
+    uint32_t idleState; // 空闲状态
+    uint32_t channel;   // 通道选择
+} PWMConfig;
 
-#endif
+// 输入捕获配置
+typedef struct
+{
+    uint32_t channel;   // 通道选择
+    uint32_t polarity;  // 极性（上升沿、下降沿）
+    uint32_t selection; // 输入捕获选择
+    uint32_t prescaler; // 捕获预分频
+    uint32_t filter;    // 输入滤波
+} InputCaptureConfig;
 
-#if TIM2_EN == 1
+// 输出比较配置
+typedef struct
+{
+    uint32_t channel;      // 通道选择
+    uint32_t compareValue; // 比较值
+    uint32_t mode;         // 输出比较模式
+    uint32_t polarity;     // 极性
+} OutputCompareConfig;
 
+// 编码器接口配置
+typedef struct
+{
+    uint32_t mode;         // 编码器模式
+    uint32_t IC1Polarity;  // 输入捕获1极性
+    uint32_t IC2Polarity;  // 输入捕获2极性
+    uint32_t IC1Selection; // 输入捕获1选择
+    uint32_t IC2Selection; // 输入捕获2选择
+    uint32_t IC1Prescaler; // 输入捕获1预分频
+    uint32_t IC2Prescaler; // 输入捕获2预分频
+    uint32_t IC1Filter;    // 输入捕获1滤波
+    uint32_t IC2Filter;    // 输入捕获2滤波
+} EncoderConfig;
 
-#endif
+// 看门狗配置
+typedef struct
+{
+    uint32_t prescaler; // 预分频器
+    uint32_t reload;    // 重载值
+    uint32_t window;    // 窗口值
+} WatchdogConfig;
 
-#if TIM3_EN == 1
+// RTC 配置
+typedef struct
+{
+    uint32_t hourFormat;     // 小时格式
+    uint32_t asynchPrediv;   // 异步预分频
+    uint32_t synchPrediv;    // 同步预分频
+    uint32_t output;         // 输出配置
+    uint32_t outputPolarity; // 输出极性
+} RTCConfig;
 
+// 低功耗定时器配置
+typedef struct
+{
+    uint32_t clockSource;  // 时钟源
+    uint32_t prescaler;    // 预分频器
+    uint32_t wave;         // 波形选择
+    uint32_t wavePolarity; // 波形极性
+    uint32_t updateMode;   // 更新模式
+} LPTIMConfig;
 
-#endif
-
-#if TIM4_EN == 1
-
-
-#endif
-
-#if TIM5_EN == 1
-
-
-#endif
-
-#if TIM6_EN == 1
-
-
-#endif
-
-#if TIM7_EN == 1
-
-
-#endif
-
-#if TIM8_EN == 1
-
-
-#endif
-
-#if TIM9_EN == 1
-
-
-#endif
-
-#if TIM10_EN == 1
-
-
-#endif
-
-// clang-format on
+void TIM_Init(TIMRE_Config *_TimConfig, void *_SpecificConfig);
 
 #endif

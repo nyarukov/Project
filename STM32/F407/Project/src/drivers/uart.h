@@ -14,11 +14,10 @@
 
 #include "gpio.h"
 #include "middle.h"
-#include "modbus_slave.h"
 
 #define DEBUG COM1
 
-#define _LOG(fmt, ...) BF_Printf(DEBUG, fmt, __VA_ARGS__)
+#define _LOG(...) BF_Printf(DEBUG, __VA_ARGS__)
 
 #define _ERR_LOG BF_Printf(DEBUG, "Error in file %s, line %d, function %s\n", __FILE__, __LINE__, __func__)
 
@@ -59,7 +58,7 @@ typedef enum
     #define UART1_RX                    PA10
     #define UART1_REUSE                 GPIO_AF_USART1
     #define UART1_RS                    UART_RS485_IO_NO
-
+    
     #define UART1_BAUD                  (115200)        // 波特率
     #define UART1_DATA                  (0)             // 数据位    0->8    1->9
     #define UART1_STOP                  (0)             // 停止位    0->1    1->2

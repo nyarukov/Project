@@ -38,7 +38,7 @@ extern DO_PARA DO;
 
 // clang-format on
 
-void DO_Init(void);
+void init_do(void);
 void DO_Proc(void);
 
 #endif

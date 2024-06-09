@@ -40,7 +40,7 @@ typedef struct
 
 extern DI_PARA DI;
 
-void DI_Init(void);
+void init_di(void);
 void DI_Read(void);
 
 #endif

@@ -21,7 +21,6 @@
 #ifndef __MIDDLE_H
 #define __MIDDLE_H
 
-
 #include <stdarg.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -33,14 +32,15 @@
 #include "lib.h"
 #include "list.h"
 #include "buffer.h"
-
 #include "stm32f4xx.h"
+#include "stm32f4xx_it.h"
+#include "uart.h"
 
-#define ENABLE_INT()    __set_PRIMASK(0)  /* 使能全局中断 */
-#define DISABLE_INT()   __set_PRIMASK(1) /* 禁止全局中断 */
+#define ENABLE_INT() __set_PRIMASK(0)  /* 使能全局中断 */
+#define DISABLE_INT() __set_PRIMASK(1) /* 禁止全局中断 */
 
-#define __RCC_GPIOX_ENABLE(VAL)         __SET_BIT((RCC->AHB1ENR), (1 << VAL))
-#define __RCC_GPIOX_DISABLE(VAL)        __CLEAR_BIT((RCC->AHB1ENR), (1 << VAL))
+#define __RCC_GPIOX_ENABLE(VAL) __SET_BIT((RCC->AHB1ENR), (1 << VAL))
+#define __RCC_GPIOX_DISABLE(VAL) __CLEAR_BIT((RCC->AHB1ENR), (1 << VAL))
 
 /************************************************GPIO 操作宏定义*******************************************************/
 /**
@@ -81,14 +81,17 @@
  * @param VAL 值
  */
 #if 0
-#define __IO_WRITE_AFR(REG, PIN, VAL)   __SET_BIT((REG->AFR[1]), (VAL << ((PIN - 8) << 2)));
+#define __IO_WRITE_AFR(REG, PIN, VAL) __SET_BIT((REG->AFR[1]), (VAL << ((PIN - 8) << 2)));
 #else
 
-#define __IO_WRITE_AFR(REG, PIN, VAL)                            \
-    if (PIN < 7) {                                               \
-        __SET_BIT((REG->AFR[0]), (VAL << (PIN << 2)));           \
-    } else {                                                     \
-        __SET_BIT((REG->AFR[1]), (VAL << ((PIN - 8) << 2)));     \
+#define __IO_WRITE_AFR(REG, PIN, VAL)                        \
+    if (PIN < 7)                                             \
+    {                                                        \
+        __SET_BIT((REG->AFR[0]), (VAL << (PIN << 2)));       \
+    }                                                        \
+    else                                                     \
+    {                                                        \
+        __SET_BIT((REG->AFR[1]), (VAL << ((PIN - 8) << 2))); \
     }
 
 #endif
@@ -97,28 +100,27 @@
  * @param REG GPIOx
  * @param PIN 引脚号
  */
-#define __IO_SET_BIT(REG, PIN)     __SET_BIT((REG->BSRRL), (1 << PIN))
+#define __IO_SET_BIT(REG, PIN) __SET_BIT((REG->BSRRL), (1 << PIN))
 
 /**
  * @brief 复位 GPIO 输出寄存器指定位
  * @param REG GPIOx
  * @param PIN 引脚号
  */
-#define __IO_RESET_BIT(REG, PIN)     __SET_BIT((REG->BSRRH), (1 << PIN))
+#define __IO_RESET_BIT(REG, PIN) __SET_BIT((REG->BSRRH), (1 << PIN))
 
 /**
  * @brief 读取 GPIO 输入寄存器指定位
  * @param REG GPIOx
  * @param PIN 引脚号
  */
-#define __IO_READ_IN(REG, PIN)       __CMP_REG(__READ_BIT((REG->IDR), (1 << PIN)), (1 << PIN))
+#define __IO_READ_IN(REG, PIN) __CMP_REG(__READ_BIT((REG->IDR), (1 << PIN)), (1 << PIN))
 
 /**
  * @brief 读取 GPIO 输出寄存器指定位
  * @param REG GPIOx
  * @param PIN 引脚号
  */
-#define __IO_READ_OUT(REG, PIN)       __CMP_REG(__READ_BIT((REG->ODR), (1 << PIN)), (1 << PIN))
-
+#define __IO_READ_OUT(REG, PIN) __CMP_REG(__READ_BIT((REG->ODR), (1 << PIN)), (1 << PIN))
 
 #endif

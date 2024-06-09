@@ -8,8 +8,8 @@
  */
 
 #include "uart.h"
-
-// C 文件内容...
+#include "modbus_slave.h"
+//  C 文件内容...
 
 #if (UART_COUNT > 0)
 
@@ -23,10 +23,9 @@ typedef struct COM_Config
     uint8_t Data : 4;
     uint8_t Stop : 2;
     uint8_t Parity : 2;
-
-    Buffer_t TxBuf;
-    Buffer_t RxBuf;
-} COM_Config;
+    struct Buffer_t TxBuf;
+    struct Buffer_t RxBuf;
+} __attribute__((packed)) COM_Config;
 
 #define UART_WAIT_FOR_TX_COMPLETE(_Id) while (!(COM_OF(_Id).Port->SR & (1 << 7)))
 
@@ -164,6 +163,8 @@ static struct COM_Config Config[UART_COUNT] = {
 #endif
 
 };
+
+
 
 static void UART_Init(COM_Config *_Para)
 {
@@ -485,7 +486,7 @@ void Uart_Proc(COM_ID _Id)
 
             if (_Id == COM2)
             {
-                Modbus_Slave(COM_OF(_Id).RxBuf.Buf, len);
+                Modbus_Slave_Proc(&Salve1, COM_OF(_Id).RxBuf.Buf, len);
             }
             else
             {

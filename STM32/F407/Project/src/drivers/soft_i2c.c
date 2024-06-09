@@ -96,7 +96,7 @@ void Soft_I2C_Init(void)
     }
     // clang-format off
     #if I2C1_EN == 1
-        _LOG("--> I2C1_BUS_Init!\r\n", NULL);
+        _LOG("--> I2C1_BUS_Init!\r\n");
     #endif
 
     #if I2C2_EN == 1
@@ -277,9 +277,10 @@ void Soft_I2C_SacnBus(I2C_ID _ID)
     {
         if (Soft_I2C_AddrCheck(_ID, i << 1) == BF_ACK)
         {
-            _LOG("Addr: %#X\r\n", i << 1);
+            _LOG("Addr:[%#X]\t", i << 1);
         }
     }
+    _LOG("\r\n");
 }
 
 /**

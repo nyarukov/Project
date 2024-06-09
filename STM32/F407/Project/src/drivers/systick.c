@@ -10,25 +10,24 @@
 #include "systick.h"
 
 // C 文件内容...
-/**
- * @brief 
- *
- * @param us
- */
+void inti_systemtick(void)
+{
+    SysTick->LOAD = (SystemCoreClock / SYSTICK_VAL) - 1;
+    SysTick->VAL = 0UL;
+    SysTick->CTRL = SysTick_CTRL_CLKSOURCE_Msk |
+                    SysTick_CTRL_TICKINT_Msk |
+                    SysTick_CTRL_ENABLE_Msk;
+}
 void Delay_Us(uint32_t us)
 {
-    SysTick->LOAD = us * (SystemCoreClock / 8000000);
-    SysTick->VAL = 0UL;
-    SysTick->CTRL |= SysTick_CTRL_ENABLE_Msk;
-    while (!(SysTick->CTRL & SysTick_CTRL_COUNTFLAG_Msk))
-        ;
-    SysTick->CTRL &= ~SysTick_CTRL_ENABLE_Msk;
+    uint32_t count = (SystemCoreClock / 1000000) * us / 5;
+    while (count--)
+    {
+        __NOP();
+    }
 }
 
 void Delay_Ms(uint32_t ms)
 {
-    while (ms--)
-    {
-        Delay_Us(1000);
-    }
+    TIME_OUT(ms);
 }

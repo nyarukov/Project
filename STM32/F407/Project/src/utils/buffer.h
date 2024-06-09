@@ -35,14 +35,14 @@ typedef enum
     BUFFER_WRITTEN_COUNT        // 获取已经写入到缓存区的数据的数量，单位字节 
 } Buffer_Cmd;
 
-typedef struct
+typedef struct Buffer_t
 {
     uint8_t *Buf;
     uint32_t BufSize;
     __IO uint32_t Write;
     __IO uint32_t Read;
     __IO uint32_t Count;
-} Buffer_t;
+} __attribute__((packed)) Buffer_t;
 
 Status Buffer_Config(Buffer_t *_pBuf,
                      void *_Data,

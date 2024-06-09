@@ -1,19 +1,28 @@
 /*
- * ÏîÄ¿Ãû³Æ: systick
- * °æ±¾:1.0
- * ×÷Õß: Yusaka
- * ´´½¨ÈÕÆÚ: 2024-06-01
- * ×îºóĞŞ¸ÄÈÕÆÚ: 2024-06-01 18:09:50
- * ÃèÊö: µÎ´ğ¶¨Ê±Æ÷Çı¶¯
+ * é¡¹ç›®åç§°: systick
+ * ç‰ˆæœ¬:1.0
+ * ä½œè€…: Yusaka
+ * åˆ›å»ºæ—¥æœŸ: 2024-06-01
+ * æœ€åä¿®æ”¹æ—¥æœŸ: 2024-06-01 18:28:19
+ * æè¿°: æ»´ç­”å®šæ—¶å™¨é©±åŠ¨
  */
 
 #ifndef __SYSTICK_H
 #define __SYSTICK_H
 
-// Í·ÎÄ¼şÄÚÈİ...
+// å¤´æ–‡ä»¶å†…å®¹...
 
 #include "middle.h"
 
+// clang-format off
+#define SYSTICK_VAL             (1000) 
+
+#define TIME_OUT(x) \
+    for (uint32_t _Start = Get_Tick(); (Get_Tick() - _Start) < (x - 1);)
+
+// clang-format on
+
+void inti_systemtick(void);
 void Delay_Us(uint32_t us);
 void Delay_Ms(uint32_t ms);
 

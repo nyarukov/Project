@@ -20,7 +20,7 @@
 
 DO_PARA DO;
 
-void DO_Init(void)
+void init_do(void)
 {
     #if defined(DO1)
         INIT_DO_PIN(DO1);

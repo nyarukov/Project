@@ -11,24 +11,18 @@
 
 // C 文件内容...
 
-typedef struct
-{
-    uint16_t Addr;
-    uint16_t Count;
-    uint8_t Len;
-    uint8_t Buf[MODEBUS_RX_BUFSIZE];
-} Modbus_Slave_t;
-
-Modbus_Slave_t MS;
-
 // clang-format off
-#define MODBUS_READ_COILS                   0x01    // 读取线圈状态（读取开关量输入状态）
-#define MODBUS_READ_DISCRETE_INPUTS         0x02    // 读取输入状态（读取开关量输出状态）
-#define MODBUS_READ_HOLDING_REGISTERS       0x03    // 读取保持寄存器（读取存储的数据）
-#define MODBUS_READ_INPUT_REGISTERS         0x04    // 读取输入寄存器（读取存储的数据）
-#define MODBUS_WRITE_SINGLE_COIL            0x05    // 强制单线圈（控制开关量输出）
-#define MODBUS_WRITE_SINGLE_REGISTER        0x06    // 写单个保持寄存器（控制存储的数据）
-#define MODBUS_WRITE_MULTIPLE_REGISTERS     0x10    // 写多个保持寄存器（控制存储的数据）
+#define Modmalloc(type, size)               (type *)malloc(sizeof(type) * size);
+#define Modfree(prt)                        free(prt)
+
+#define READ_COILS                          0x01    // 读取线圈状态（读取开关量输入状态）
+#define READ_DISCRETE_INPUTS                0x02    // 读取输入状态（读取开关量输出状态）
+#define READ_HOLDING_REGISTERS              0x03    // 读取保持寄存器（读取存储的数据）
+#define READ_INPUT_REGISTERS                0x04    // 读取输入寄存器（读取存储的数据）
+#define WRITE_SINGLE_COIL                   0x05    // 强制单线圈（控制开关量输出）
+#define WRITE_MULTIPLE_COILS                0x0F    // 强制多单线圈（控制开关量输出）
+#define WRITE_SINGLE_REGISTER               0x06    // 写单个保持寄存器（控制存储的数据）
+#define WRITE_MULTIPLE_REGISTERS            0x10    // 写多个保持寄存器（控制存储的数据）
 
 
 #define ILLEGAL_FUNCTION                    0x01    // 非法功能码
@@ -39,356 +33,608 @@ Modbus_Slave_t MS;
 #define SLAVE_DEVICE_BUSY                   0x06    // 从机忙
 #define NEGATIVE_ACKNOWLEDGE                0x07    // 否定确认
 #define PARITY_ERROR                        0x08    // 存储奇偶性差错
-
-
-
-uint8_t Input_Registers[Input_Reg_Count];
-uint8_t Holding_Registers[Holding_Reg_Count];
-
 // clang-format on
 
-static Status Modbus_Error(uint8_t *_pBuf)
+static uint16_t Addr;
+static uint32_t Count;
+static uint32_t Len;
+
+/**
+ * @brief 初始化Modbus从站结构。
+ *
+ * @param _Slave 指向要初始化的 ModbusSlave 结构的指针。
+ * @param _IDx 通信端口号
+ * @param _addr 从设备的地址。
+ * @param SendData 串口发送函数。
+ * @param _holding_size 保持寄存器数组的大小。
+ * @param _input_size 输入寄存器数组的大小。
+ * @param _coils_size 线圈数组的大小。
+ * @param _discrete_size 离散输入数组的大小。
+ * @return Status 指示初始化过程成功或失败的状态。
+ */
+Status init_modbus_slave(ModbusSlave *_Slave,
+                         COM_ID _IDx,
+                         uint8_t _addr,
+                         Status (*SendData)(COM_ID _Id,
+                                            uint8_t *_pBuf,
+                                            uint32_t _Len),
+                         size_t _holding_size,
+                         size_t _input_size,
+                         size_t _coils_size,
+                         size_t _discrete_size)
 {
-    uint16_t crc;
-    uint8_t sendbuff[5];
-    sendbuff[0] = _pBuf[0];                // Modbus 设备地址
-    sendbuff[1] = 0x80 | _pBuf[1];         // 功能码的响应码
-    sendbuff[2] = 0;                       // 异常码
-    crc = Check_Modbus_CRC16(sendbuff, 3); // 计算 CRC 校验值
-    sendbuff[3] = (uint8_t)(crc >> 8);     // CRC 校验值高位
-    sendbuff[4] = (uint8_t)crc;            // CRC 校验值低位
-    Uart_SendData(COM2, sendbuff, 5);      // 发送异常响应数据
 
-    return BF_ERROR;
-}
+    if (!_Slave)
+        return BF_NULL_POINTER;
+    _Slave->Registers._Coils_ptr =
+        Modmalloc(uint8_t, _coils_size);
 
-static void Modbus_SendData(uint16_t _Len)
-{
-    uint16_t _CRC = Check_Modbus_CRC16(MS.Buf, _Len);
-
-    MS.Buf[_Len] = LOW_BYTE(_CRC);
-    MS.Buf[_Len + 1] = HIGH_BYTE(_CRC);
-
-    Uart_SendData(COM2, MS.Buf, _Len + 2);
-}
-
-// 读取线圈状态（读取开关量输入状态）
-void Modbus_01H(uint8_t *_pBuf)
-{
-    /*
-        主机发送:
-            11 从机地址
-            01 功能码
-            00 寄存器起始地址高字节
-            13 寄存器起始地址低字节
-            00 寄存器数量高字节
-            25 寄存器数量低字节
-            0E CRC校验高字节
-            84 CRC校验低字节
-
-        从机应答: 	1代表ON，0代表OFF。若返回的线圈数不为8的倍数，则在最后数据字节未尾使用0代替. BIT0对应第1个
-            11 从机地址
-            01 功能码
-            05 返回字节数
-            CD 数据1(线圈0013H-线圈001AH)
-            6B 数据2(线圈001BH-线圈0022H)
-            B2 数据3(线圈0023H-线圈002AH)
-            0E 数据4(线圈0032H-线圈002BH)
-            1B 数据5(线圈0037H-线圈0033H)
-            45 CRC校验高字节
-            E6 CRC校验低字节
-    */
-
-    MS.Addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
-    MS.Count = LEBufToUint16(_pBuf[4], _pBuf[5]);
-
-    MS.Len = BYTE_COUNT(MS.Count);
-
-    MS.Buf[0] = _pBuf[0];
-    MS.Buf[1] = _pBuf[1];
-    MS.Buf[2] = MS.Len;
-
-    mem_cpy(&MS.Buf[3], &DO.DO_This[MS.Addr], MS.Len);
-
-    Modbus_SendData(3 + MS.Len);
-}
-
-// 读取离散输入状态（读取开关量输出状态）
-void Modbus_02H(uint8_t *_pBuf)
-{
-    /*
-    主机发送:
-        11 从机地址
-        02 功能码
-        00 寄存器地址高字节
-        C4 寄存器地址低字节
-        00 寄存器数量高字节
-        16 寄存器数量低字节
-        BA CRC校验高字节
-        A9 CRC校验低字节
-
-    从机应答:  响应各离散输入寄存器状态，分别对应数据区中的每位值，1 代表ON；0 代表OFF。
-               第一个数据字节的LSB(最低字节)为查询的寻址地址，其他输入口按顺序在该字节中由低字节
-               向高字节排列，直到填充满8位。下一个字节中的8个输入位也是从低字节到高字节排列。
-               若返回的输入位数不是8的倍数，则在最后的数据字节中的剩余位至该字节的最高位使用0填充。
-        11 从机地址
-        02 功能码
-        03 返回字节数
-        AC 数据1(00C4H-00CBH)
-        DB 数据2(00CCH-00D3H)
-        35 数据3(00D4H-00D9H)
-        20 CRC校验高字节
-        18 CRC校验低字节
-    */
-
-    MS.Addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
-    MS.Count = LEBufToUint16(_pBuf[4], _pBuf[5]);
-
-    MS.Len = BYTE_COUNT(MS.Count);
-
-    MS.Buf[0] = _pBuf[0];
-    MS.Buf[1] = _pBuf[1];
-    MS.Buf[2] = MS.Len;
-
-    mem_cpy(&MS.Buf[3], &DI.DI_This[MS.Addr], MS.Len);
-
-    Modbus_SendData(3 + MS.Len);
-}
-
-// 读取保持寄存器（读取存储的数据）
-void Modbus_03H(uint8_t *_pBuf)
-{
-    /*
-        主机发送:
-            11 从机地址
-            03 功能码
-            00 寄存器地址高字节
-            6B 寄存器地址低字节
-            00 寄存器数量高字节
-            03 寄存器数量低字节
-            76 CRC高字节
-            87 CRC低字节
-
-        从机应答: 	保持寄存器的长度为2个字节。对于单个保持寄存器而言，寄存器高字节数据先被传输，
-                    低字节数据后被传输。保持寄存器之间，低地址寄存器先被传输，高地址寄存器后被传输。
-            11 从机地址
-            03 功能码
-            06 字节数
-            00 数据1高字节(006BH)
-            6B 数据1低字节(006BH)
-            00 数据2高字节(006CH)
-            13 数据2 低字节(006CH)
-            00 数据3高字节(006DH)
-            00 数据3低字节(006DH)
-            38 CRC高字节
-            B9 CRC低字节
-    */
-    MS.Addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
-    MS.Count = LEBufToUint16(_pBuf[4], _pBuf[5]);
-    MS.Len = MS.Count << 1;
-
-    MS.Buf[0] = _pBuf[0];
-    MS.Buf[1] = _pBuf[1];
-    MS.Buf[2] = MS.Len;
-
-    mem_cpy(&MS.Buf[3], &Holding_Registers[MS.Addr], MS.Len);
-
-    Modbus_SendData(3 + MS.Len);
-}
-
-// 读取输入寄存器（读取存储的数据）
-void Modbus_04H(uint8_t *_pBuf)
-{
-    /*
-        主机发送:
-            11 从机地址
-            04 功能码
-            00 寄存器起始地址高字节
-            08 寄存器起始地址低字节
-            00 寄存器个数高字节
-            02 寄存器个数低字节
-            F2 CRC高字节
-            99 CRC低字节
-
-        从机应答:  输入寄存器长度为2个字节。对于单个输入寄存器而言，寄存器高字节数据先被传输，
-                低字节数据后被传输。输入寄存器之间，低地址寄存器先被传输，高地址寄存器后被传输。
-            11 从机地址
-            04 功能码
-            04 字节数
-            00 数据1高字节(0008H)
-            0A 数据1低字节(0008H)
-            00 数据2高字节(0009H)
-            0B 数据2低字节(0009H)
-            8B CRC高字节
-            80 CRC低字节
-    */
-    MS.Addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
-    MS.Count = LEBufToUint16(_pBuf[4], _pBuf[5]);
-    MS.Len = MS.Count << 1;
-
-    MS.Buf[0] = _pBuf[0];
-    MS.Buf[1] = _pBuf[1];
-    MS.Buf[2] = MS.Len;
-
-    mem_cpy(&MS.Buf[3], &Input_Registers[MS.Addr], MS.Len);
-
-    Modbus_SendData(3 + MS.Len);
-}
-
-// 写单个输出线圈（控制开关量输出）
-void Modbus_05H(uint8_t *_pBuf)
-{
-    /*
-        主机发送:
-            11 从机地址
-            05 功能码
-            00 寄存器地址高字节
-            AC 寄存器地址低字节
-            FF 数据1高字节
-            00 数据2低字节
-            4E CRC校验高字节
-            8B CRC校验低字节
-
-        从机应答:
-            11 从机地址
-            05 功能码
-            00 寄存器地址高字节
-            AC 寄存器地址低字节
-            FF 寄存器1高字节
-            00 寄存器1低字节
-            4E CRC校验高字节
-            8B CRC校验低字节
-    */
-    MS.Addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
-
-    if (_pBuf[4] & 0x01)
+    if (_Slave->Registers._Coils_ptr == BF_NULL)
     {
-        DO.DO_This[MS.Addr >> 3] |= (1 << (MS.Addr % 8));
+        Modfree(_Slave->Registers._Coils_ptr);
+        return BF_NULL_POINTER;
+    }
+    _Slave->Registers._DiscreteInputs_ptr =
+        Modmalloc(uint8_t, _discrete_size);
+    if (_Slave->Registers._DiscreteInputs_ptr == BF_NULL)
+    {
+        Modfree(_Slave->Registers._Coils_ptr);
+        Modfree(_Slave->Registers._DiscreteInputs_ptr);
+        return BF_NULL_POINTER;
+    }
+    _Slave->Registers._HoldingRegisters_ptr =
+        Modmalloc(uint16_t, _holding_size);
+    if (_Slave->Registers._HoldingRegisters_ptr == BF_NULL)
+    {
+        Modfree(_Slave->Registers._Coils_ptr);
+        Modfree(_Slave->Registers._DiscreteInputs_ptr);
+        Modfree(_Slave->Registers._HoldingRegisters_ptr);
+        return BF_NULL_POINTER;
+    }
+    _Slave->Registers._InputRegisters_ptr =
+        Modmalloc(uint16_t, _input_size);
+    if (_Slave->Registers._InputRegisters_ptr == BF_NULL)
+    {
+        Modfree(_Slave->Registers._Coils_ptr);
+        Modfree(_Slave->Registers._DiscreteInputs_ptr);
+        Modfree(_Slave->Registers._HoldingRegisters_ptr);
+        Modfree(_Slave->Registers._InputRegisters_ptr);
+
+        return BF_NULL_POINTER;
+    }
+
+    mem_set(_Slave->Registers._Coils_ptr, 0, _coils_size);
+    mem_set(_Slave->Registers._DiscreteInputs_ptr, 0, _discrete_size);
+    mem_set(_Slave->Registers._HoldingRegisters_ptr, 0, _holding_size);
+    mem_set(_Slave->Registers._InputRegisters_ptr, 0, _input_size);
+
+    _Slave->Control.Com = _IDx;
+    _Slave->Control.Addr = _addr;
+    _Slave->Control.Status |= BF_INTI;
+
+    _Slave->Control.SendData = SendData;
+    _Slave->Registers._HoldingRegisters_size = _holding_size;
+    _Slave->Registers._InputRegisters_size = _input_size;
+    _Slave->Registers._Coils_size = _coils_size;
+    _Slave->Registers._DiscreteInputs_size = _discrete_size;
+
+    return BF_OK;
+}
+
+Status free_modbus_slave(ModbusSlave *_Slave)
+{
+    if (!_Slave)
+        return BF_NULL_POINTER;
+
+    Modfree(_Slave->Registers._HoldingRegisters_ptr);
+    Modfree(_Slave->Registers._InputRegisters_ptr);
+    Modfree(_Slave->Registers._Coils_ptr);
+    Modfree(_Slave->Registers._DiscreteInputs_ptr);
+    return BF_OK;
+}
+
+static void Error(ModbusSlave *_Slave,
+                  uint8_t _Code,
+                  uint8_t _ErrorCode)
+{
+    uint8_t Buf[5];
+
+    Buf[0] = _Slave->Control.Addr; // Modbus 设备地址
+    Buf[1] = 0x80 | _Code;         // 功能码的响应码
+    Buf[2] = _ErrorCode;           // 异常码
+
+    uint16_t _CRC = Check_Modbus_CRC16(Buf, 3); // 计算 CRC 校验值
+    Buf[3] = LOW_BYTE(_CRC);                    // CRC 校验值高位
+    Buf[4] = HIGH_BYTE(_CRC);                   // CRC 校验值低位
+
+    _Slave->Control.SendData(_Slave->Control.Com, Buf, 5); // 发送异常响应数据
+}
+
+static void SendData(ModbusSlave *_Slave,
+                     uint8_t *_pBuf,
+                     uint32_t _Len)
+{
+    uint16_t _CRC = Check_Modbus_CRC16(_pBuf, _Len);
+
+    _pBuf[_Len] = LOW_BYTE(_CRC);
+    _pBuf[_Len + 1] = HIGH_BYTE(_CRC);
+
+    _Slave->Control.SendData(_Slave->Control.Com, _pBuf, _Len + 2);
+}
+
+static Status read_coil_status(ModbusSlave *_Slave)
+{
+    Len = BYTE_COUNT(Count);
+
+    uint8_t *Buf = Modmalloc(uint8_t, Len + 5);
+    if (Buf == BF_NULL)
+    {
+        return BF_NULL_POINTER;
+    }
+
+    Buf[0] = _Slave->Control.Addr;
+    Buf[1] = READ_COILS;
+    Buf[2] = Len;
+
+    mem_cpy(&Buf[3], &_Slave->Registers._Coils_ptr[Addr], Len);
+
+    SendData(_Slave, Buf, 3 + Len);
+
+    Modfree(Buf);
+    return BF_OK;
+}
+
+static Status read_discrete_input_status(ModbusSlave *_Slave)
+{
+    Len = BYTE_COUNT(Count);
+
+    uint8_t *Buf = Modmalloc(uint8_t, Len + 5);
+    if (Buf == BF_NULL)
+    {
+        return BF_NULL_POINTER;
+    }
+
+    Buf[0] = _Slave->Control.Addr;
+    Buf[1] = READ_DISCRETE_INPUTS;
+    Buf[2] = Len;
+
+    mem_cpy(&Buf[3], &_Slave->Registers._DiscreteInputs_ptr[Addr], Len);
+
+    SendData(_Slave, Buf, 3 + Len);
+
+    Modfree(Buf);
+    return BF_OK;
+}
+
+static Status read_holding_register(ModbusSlave *_Slave)
+{
+    Len = Count << 1;
+
+    uint8_t *Buf = Modmalloc(uint8_t, Len + 5);
+    if (Buf == BF_NULL)
+    {
+        return BF_NULL_POINTER;
+    }
+
+    Buf[0] = _Slave->Control.Addr;
+    Buf[1] = READ_HOLDING_REGISTERS;
+    Buf[2] = Len;
+
+    mem_cpy(&Buf[3], &_Slave->Registers._HoldingRegisters_ptr[Addr], Len);
+
+    SendData(_Slave, Buf, 3 + Len);
+
+    Modfree(Buf);
+    return BF_OK;
+}
+
+static Status read_input_register(ModbusSlave *_Slave)
+{
+    Len = Count << 1;
+
+    uint8_t *Buf = Modmalloc(uint8_t, Len + 5);
+    if (Buf == BF_NULL)
+    {
+        return BF_NULL_POINTER;
+    }
+
+    Buf[0] = _Slave->Control.Addr;
+    Buf[1] = READ_INPUT_REGISTERS;
+    Buf[2] = Len;
+
+    mem_cpy(&Buf[3], &_Slave->Registers._InputRegisters_ptr[Addr], Len);
+
+    SendData(_Slave, Buf, 3 + Len);
+
+    Modfree(Buf);
+    return BF_OK;
+}
+
+static Status write_single_output_coil(ModbusSlave *_Slave,
+                                       uint8_t *_pBuf)
+{
+
+    if (_pBuf[0] & 0x01)
+    {
+        _Slave->Registers._Coils_ptr[Addr >> 3] |= (1 << (Addr % 8));
     }
     else
     {
-        DO.DO_This[MS.Addr >> 3] &= ~(1 << (MS.Addr % 8));
+        _Slave->Registers._Coils_ptr[Addr >> 3] &= ~(1 << (Addr % 8));
     }
 
-    mem_cpy(&MS.Buf[0], &_pBuf[0], 6);
-
-    Modbus_SendData(6);
-}
-
-// 写单个保持寄存器（控制存储的数据）
-void Modbus_06H(uint8_t *_pBuf)
-{
-    /*
-        主机发送:
-            11 从机地址
-            06 功能码
-            00 寄存器地址高字节
-            01 寄存器地址低字节
-            00 数据1高字节
-            01 数据1低字节
-            9A CRC校验高字节
-            9B CRC校验低字节
-
-        从机响应:
-            11 从机地址
-            06 功能码
-            00 寄存器地址高字节
-            01 寄存器地址低字节
-            00 数据1高字节
-            01 数据1低字节
-            1B CRC校验高字节
-            5A	CRC校验低字节
-    */
-    MS.Addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
-    
-    mem_cpy(&Holding_Registers[MS.Addr << 1], &_pBuf[4], 2);
-
-    mem_cpy(&MS.Buf[0], &_pBuf[0], 6);
-
-    Modbus_SendData(6);
-}
-
-// 写多个保持寄存器（控制存储的数据）
-void Modbus_10H(uint8_t *_pBuf)
-{
-    /*
-        主机发送:
-            11 从机地址
-            10 功能码
-            00 寄存器起始地址高字节
-            01 寄存器起始地址低字节
-            00 寄存器数量高字节
-            02 寄存器数量低字节
-            04 字节数
-            00 数据1高字节
-            0A 数据1低字节
-            01 数据2高字节
-            02 数据2低字节
-            C6 CRC校验高字节
-            F0 CRC校验低字节
-
-        从机响应:
-            11 从机地址
-            06 功能码
-            00 寄存器地址高字节
-            01 寄存器地址低字节
-            00 数据1高字节
-            01 数据1低字节
-            1B CRC校验高字节
-            5A	CRC校验低字节
-    */
-
-    MS.Addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
-    MS.Count = LEBufToUint16(_pBuf[4], _pBuf[5]);
-
-    mem_cpy(&Holding_Registers[MS.Addr << 1], &_pBuf[7], _pBuf[6]);
-
-    mem_cpy(&MS.Buf[0], &_pBuf[0], 6);
-
-    Modbus_SendData(6);
-}
-
-Status Modbus_Slave(uint8_t *_pBuf, uint16_t _Len)
-{
-    if (_pBuf[0] != MODBUS_ADDRESS)
+    uint8_t *Buf = Modmalloc(uint8_t, 6);
+    if (Buf == BF_NULL)
     {
+        return BF_NULL_POINTER;
+    }
+
+    Buf[0] = _Slave->Control.Addr;
+    Buf[1] = WRITE_SINGLE_COIL;
+    Buf[2] = HIGH_BYTE(Addr);
+    Buf[3] = LOW_BYTE(Addr);
+    Buf[4] = (_Slave->Registers._Coils_ptr[Addr >> 3] & (1 << (Addr % 8))) ? 0xFF : 0x00;
+    Buf[5] = 0;
+
+    SendData(_Slave, Buf, 6);
+
+    Modfree(Buf);
+    return BF_OK;
+}
+
+#if 0
+static Status write_multiple_output_coils(ModbusSlave *_Slave,
+ {                                         uint8_t *_pBuf)
+
+    //  0  1  2  3  4  5  6  7  8
+    // 01 0F 00 00 00 0F 02 0F 0F
+    // 01 0F 00 0A 00 01 01 01
+
+    uint8_t _ByteSize = _pBuf[0];
+
+    uint8_t _AddrGroup = Addr >> 3;
+    uint8_t _Addrbits = Addr % 8;
+
+    uint8_t _ValGroup = Count >> 3;
+    uint8_t _Val_Bits = Count % 8;
+
+    _LOG("_AddrGroup[%d]\t _Addrbits[%d]\r\n", _AddrGroup, _Addrbits);
+    _LOG("_ValGroup[%d]\t _Val_Bits[%d]\r\n", _ValGroup, _Val_Bits);
+
+    if ((_Addrbits == BF_NULL) && (_Val_Bits == BF_NULL))
+    {
+        mem_cpy(&_Slave->Registers._Coils_ptr[_AddrGroup], &_pBuf[1], _ByteSize);
+    }
+    else
+    {
+        for (size_t i = 0; i < _ValGroup; i++)
+        {
+            _Slave->Registers._Coils_ptr[Addr + i] &= ~0xFF;
+            _Slave->Registers._Coils_ptr[Addr + i] = _pBuf[1 + i];
+        }
+
+        // 非零偏移量需要逐位处理
+        for (size_t i = 0; i < _Val_Bits; i++)
+        {
+            uint8_t bit_pos = (_Addrbits + i) % 8;               // 当前位在字节中的位置
+            uint8_t byte_pos = _AddrGroup + (_Addrbits + i) / 8; // 当前字节的位置
+
+            // 清除当前位
+            _Slave->Registers._Coils_ptr[byte_pos] &= ~(1 << bit_pos);
+            // 设置当前位
+            _Slave->Registers._Coils_ptr[byte_pos] |= ((_pBuf[1 + _ValGroup] >> i) & 0x01) << bit_pos;
+
+            _LOG("[%d]\t", (_pBuf[_ValGroup] >> i) & 0x01);
+        }
+        _LOG("\r\n");
+    }
+
+    uint8_t *Buf = Modmalloc(uint8_t, 6);
+    if (Buf == BF_NULL)
+    {
+        return BF_NULL_POINTER;
+    }
+
+    Buf[0] = _Slave->Control.Addr;
+    Buf[1] = WRITE_MULTIPLE_COILS;
+
+    Buf[2] = HIGH_BYTE(Addr);
+    Buf[3] = LOW_BYTE(Addr);
+    Buf[4] = HIGH_BYTE(Count);
+    Buf[5] = LOW_BYTE(Count);
+
+    SendData(_Slave, Buf, 6);
+
+    Modfree(Buf);
+
+return BF_OK;
+}
+#endif
+static Status write_single_holding_register(ModbusSlave *_Slave,
+                                            uint8_t *_pBuf)
+{
+    Len = Count << 1;
+
+    uint8_t *Buf = Modmalloc(uint8_t, 6);
+    if (Buf == BF_NULL)
+    {
+        return BF_NULL_POINTER;
+    }
+
+    Buf[0] = _Slave->Control.Addr;
+    Buf[1] = WRITE_SINGLE_REGISTER;
+    Buf[2] = HIGH_BYTE(Addr);
+    Buf[3] = LOW_BYTE(Addr);
+    Buf[4] = _pBuf[0];
+    Buf[5] = _pBuf[1];
+
+    _Slave->Registers._HoldingRegisters_ptr[Addr] =
+        BEBufToUint16(_pBuf[0], _pBuf[1]);
+
+    SendData(_Slave, Buf, 6);
+
+    Modfree(Buf);
+    return BF_OK;
+}
+
+static Status wrtie_multiple_holding_registers(ModbusSlave *_Slave,
+                                               uint8_t *_pBuf)
+{
+    Len = Count << 1;
+
+    uint8_t *Buf = Modmalloc(uint8_t, 6);
+    if (Buf == BF_NULL)
+    {
+        return BF_NULL_POINTER;
+    }
+
+    mem_cpy((uint8_t *)&_Slave->Registers._HoldingRegisters_ptr[Addr],
+            &_pBuf[0], Len);
+
+    SendData(_Slave, Buf, 6);
+
+    Modfree(Buf);
+    return BF_OK;
+}
+
+Status Modbus_Slave_Proc(ModbusSlave *_Slave,
+                         uint8_t *_pBuf,
+                         uint32_t _Len)
+{
+    if (!_Slave)
+        return BF_NULL_POINTER;
+    if (_pBuf[0] != _Slave->Control.Addr)
+        return BF_ADDR_ERROR;
+
+    if (LEBufToUint16(_pBuf[_Len - 1], _pBuf[_Len - 2]) !=
+        Check_Modbus_CRC16(_pBuf, _Len - 2))
+        return BF_CRC_ERROR;
+
+    Addr = LEBufToUint16(_pBuf[2], _pBuf[3]);
+    Count = LEBufToUint16(_pBuf[4], _pBuf[5]);
+
+    switch (_pBuf[1])
+    {
+    case READ_COILS:
+
+        if (Count > _Slave->Registers._Coils_size)
+        {
+            Error(_Slave, _pBuf[1], ILLEGAL_DATA_ADDRESS);
+            return BF_TOO_LARGE;
+        }
+        return read_coil_status(_Slave);
+
+    case READ_DISCRETE_INPUTS:
+
+        if (Count > _Slave->Registers._DiscreteInputs_size)
+        {
+            Error(_Slave, _pBuf[1], ILLEGAL_DATA_ADDRESS);
+            return BF_TOO_LARGE;
+        }
+        return read_discrete_input_status(_Slave);
+
+    case READ_HOLDING_REGISTERS:
+
+        if (Count > _Slave->Registers._HoldingRegisters_size)
+        {
+            Error(_Slave, _pBuf[1], ILLEGAL_DATA_ADDRESS);
+            return BF_TOO_LARGE;
+        }
+        return read_holding_register(_Slave);
+
+    case READ_INPUT_REGISTERS:
+
+        if (Count > _Slave->Registers._InputRegisters_size)
+        {
+            Error(_Slave, _pBuf[1], ILLEGAL_DATA_ADDRESS);
+            return BF_TOO_LARGE;
+        }
+        return read_input_register(_Slave);
+
+    case WRITE_SINGLE_COIL:
+
+        if (Addr > _Slave->Registers._Coils_size)
+        {
+            Error(_Slave, _pBuf[1], ILLEGAL_DATA_ADDRESS);
+            return BF_TOO_LARGE;
+        }
+
+        return write_single_output_coil(_Slave, &_pBuf[4]);
+#if 0
+    case WRITE_MULTIPLE_COILS:
+        if ((Addr > _Slave->Registers._Coils_size) ||
+            ((Addr + _pBuf[6]) > _Slave->Registers._Coils_size))
+        {
+            Error(_Slave, _pBuf[1], ILLEGAL_DATA_ADDRESS);
+            return BF_TOO_LARGE;
+        }
+
+        return write_multiple_output_coils(_Slave, &_pBuf[6]);
+#endif
+    case WRITE_SINGLE_REGISTER:
+
+        if (Addr > _Slave->Registers._HoldingRegisters_size)
+        {
+            Error(_Slave, _pBuf[1], ILLEGAL_DATA_ADDRESS);
+            return BF_TOO_LARGE;
+        }
+        return write_single_holding_register(_Slave, &_pBuf[4]);
+
+    case WRITE_MULTIPLE_REGISTERS:
+
+        if ((Count > _Slave->Registers._HoldingRegisters_size) ||
+            ((Addr + Count) > _Slave->Registers._Coils_size))
+        {
+            Error(_Slave, _pBuf[1], ILLEGAL_DATA_ADDRESS);
+            return BF_TOO_LARGE;
+        }
+        return wrtie_multiple_holding_registers(_Slave, &_pBuf[7]);
+
+    default:
+        Error(_Slave, _pBuf[1], ILLEGAL_FUNCTION);
         return BF_ERROR;
     }
+}
 
-    if (LEBufToUint16(_pBuf[_Len - 1], _pBuf[_Len - 2]) != Check_Modbus_CRC16(_pBuf, _Len - 2))
+/**
+ * @brief 写入线圈寄存器
+ *
+ * 此函数将指定的字节缓冲区内容写入到 Modbus 从机的线圈寄存器中。
+ *
+ * @param _Slave 指向 Modbus 从机结构体的指针
+ * @param _Addr 起始地址
+ * @param _pBuf 指向要写入的数据缓冲区的指针
+ * @param _Len 要写入的字节数
+ * @return Status 返回操作状态
+ *         - BF_OK: 操作成功
+ *         - BF_NULL_POINTER: 空指针错误
+ *         - BF_INVALID_PARAM: 参数无效
+ */
+Status Modbus_Slave_Write_Coil(ModbusSlave *_Slave,
+                               uint16_t _Addr,
+                               uint8_t *_pBuf,
+                               uint32_t _Len)
+{
+    if (!_Slave)
     {
-        return Modbus_Error(_pBuf);
+        return BF_NULL_POINTER;
+    }
+    else if (_Addr >= _Slave->Registers._Coils_size ||
+             (_Addr + _Len) > _Slave->Registers._Coils_size)
+    {
+        return BF_INVALID_PARAM;
     }
     else
     {
-        mem_set((char *)&MS, 0, sizeof(Modbus_Slave_t));
+        memcpy(&_Slave->Registers._Coils_ptr[_Addr], _pBuf, _Len);
+        return BF_OK;
+    }
+}
 
-        switch (_pBuf[1])
-        {
-        case MODBUS_READ_COILS:
-            Modbus_01H(_pBuf);
-            break;
-        case MODBUS_READ_DISCRETE_INPUTS:
-            Modbus_02H(_pBuf);
-            break;
-        case MODBUS_READ_HOLDING_REGISTERS:
-            Modbus_03H(_pBuf);
-            break;
-        case MODBUS_READ_INPUT_REGISTERS:
-            Modbus_04H(_pBuf);
-            break;
-        case MODBUS_WRITE_SINGLE_COIL:
-            Modbus_05H(_pBuf);
-            break;
-        case MODBUS_WRITE_SINGLE_REGISTER:
-            Modbus_06H(_pBuf);
-            break;
-        case MODBUS_WRITE_MULTIPLE_REGISTERS:
-            Modbus_10H(_pBuf);
-            break;
-        default:
-            Modbus_Error(_pBuf);
-            break;
-        }
+/**
+ * @brief 写入离散输入寄存器
+ *
+ * 此函数将指定的字节缓冲区内容写入到 Modbus 从机的离散输入寄存器中。
+ *
+ * @param _Slave 指向 Modbus 从机结构体的指针
+ * @param _Addr 起始地址
+ * @param _pBuf 指向要写入的数据缓冲区的指针
+ * @param _Len 要写入的字节数
+ * @return Status 返回操作状态
+ *         - BF_OK: 操作成功
+ *         - BF_NULL_POINTER: 空指针错误
+ *         - BF_INVALID_PARAM: 参数无效
+ */
+Status Modbus_Slave_Write_Discrete(ModbusSlave *_Slave,
+                                   uint16_t _Addr,
+                                   uint8_t *_pBuf,
+                                   uint32_t _Len)
+{
+    if (!_Slave)
+    {
+        return BF_NULL_POINTER;
+    }
+    else if (_Addr >= _Slave->Registers._DiscreteInputs_size ||
+             (_Addr + _Len) > _Slave->Registers._DiscreteInputs_size)
+    {
+        return BF_INVALID_PARAM;
+    }
+    else
+    {
+        mem_cpy(&_Slave->Registers._DiscreteInputs_ptr[_Addr],
+                _pBuf, _Len);
+        return BF_OK;
+    }
+}
+
+/**
+ * @brief 写入保持寄存器
+ *
+ * 此函数将指定的缓冲区内容写入到 Modbus 从机的保持寄存器中。
+ *
+ * @param _Slave 指向 Modbus 从机结构体的指针
+ * @param _Addr 起始地址
+ * @param _pBuf 指向要写入的数据缓冲区的指针
+ * @param _Len 要写入的数据项数
+ * @return Status 返回操作状态
+ *         - BF_OK: 操作成功
+ *         - BF_NULL_POINTER: 空指针错误
+ *         - BF_INVALID_PARAM: 参数无效
+ */
+Status Modbus_Slave_Write_Holding(ModbusSlave *_Slave,
+                                  uint16_t _Addr,
+                                  uint16_t *_pBuf,
+                                  uint32_t _Len)
+{
+    if (!_Slave)
+    {
+        return BF_NULL_POINTER;
+    }
+    else if (_Addr >= _Slave->Registers._HoldingRegisters_size ||
+             (_Addr + _Len) > _Slave->Registers._HoldingRegisters_size)
+    {
+        return BF_INVALID_PARAM;
+    }
+    else
+    {
+        mem_cpy(&_Slave->Registers._HoldingRegisters_ptr[_Addr],
+                _pBuf, _Len);
+        return BF_OK;
+    }
+}
+
+/**
+ * @brief 写入输入寄存器
+ *
+ * 此函数将指定的缓冲区内容写入到 Modbus 从机的输入寄存器中。
+ *
+ * @param _Slave 指向 Modbus 从机结构体的指针
+ * @param _Addr 起始地址
+ * @param _pBuf 指向要写入的数据缓冲区的指针
+ * @param _Len 要写入的数据项数
+ * @return Status 返回操作状态
+ *         - BF_OK: 操作成功
+ *         - BF_NULL_POINTER: 空指针错误
+ *         - BF_INVALID_PARAM: 参数无效
+ */
+Status Modbus_Slave_Write_Input(ModbusSlave *_Slave,
+                                uint16_t _Addr,
+                                uint16_t *_pBuf,
+                                uint32_t _Len)
+{
+    if (!_Slave)
+    {
+        return BF_NULL_POINTER;
+    }
+    else if (_Addr >= _Slave->Registers._InputRegisters_size ||
+             (_Addr + _Len) > _Slave->Registers._InputRegisters_size)
+    {
+        return BF_INVALID_PARAM;
+    }
+    else
+    {
+        mem_cpy(&_Slave->Registers._InputRegisters_ptr[_Addr],
+                _pBuf, _Len);
+        return BF_OK;
     }
 }
