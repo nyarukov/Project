@@ -1,82 +1,67 @@
-/*
- * ÏîÄ¿Ãû³Æ: list
- * °æ±¾:1.0
- * ×÷Õß: Yusaka
- * ´´½¨ÈÕÆÚ: 2024-06-01
- * ×îºóĞŞ¸ÄÈÕÆÚ: 2024-06-01 18:31:22
- * ÃèÊö: Á´±í
+/**
+ * @file bf_list.h
+ * @author yusaka (luckychaoyue1@gmail.com)
+ * @brief
+ * @version 1.0
+ * @date 2024-05-22
+ *
+ * @copyright Copyright (c) 2024
+ *
  */
-
-#ifndef __LIST_H
-#define __LIST_H
-
-// Í·ÎÄ¼şÄÚÈİ...
+#ifndef __BF_LIST_H
+#define __BF_LIST_H
 
 #include "middle.h"
 
- /**
-  * @brief Ë«ÏòÁ´±í½Úµã½á¹¹Ìå¶¨Òå
-  */
-typedef struct bf_blist
+/**
+ * \brief åŒå‘é“¾è¡¨èŠ‚ç‚¹ç»“æ„ä½“å®šä¹‰
+ */
+typedef struct bf_list
 {
-    struct bf_blist* next; /**< Ö¸ÏòÏÂÒ»¸ö½ÚµãµÄÖ¸Õë */
-    struct bf_blist* prev; /**< Ö¸ÏòÉÏÒ»¸ö½ÚµãµÄÖ¸Õë */
-} bf_blist;
+    struct bf_list *next; /**< æŒ‡å‘ä¸‹ä¸€ä¸ªèŠ‚ç‚¹çš„æŒ‡é’ˆ */
+    struct bf_list *prev; /**< æŒ‡å‘ä¸Šä¸€ä¸ªèŠ‚ç‚¹çš„æŒ‡é’ˆ */
+} bf_list;
 
 /**
- * @brief ·ÖÅäÖ¸¶¨ÀàĞÍ´óĞ¡µÄÄÚ´æ
- *
- * @param [in] _type Òª·ÖÅäÄÚ´æµÄÀàĞÍ
- * @return ·µ»ØÖ¸Ïò·ÖÅäÄÚ´æµÄÖ¸Õë
+ * \brief åˆ†é…æŒ‡å®šç±»å‹å¤§å°çš„å†…å­˜
+ * \param [in] _type è¦åˆ†é…å†…å­˜çš„ç±»å‹
+ * \return è¿”å›æŒ‡å‘åˆ†é…å†…å­˜çš„æŒ‡é’ˆ
  */
-#define bf_blist_malloc(_type)               \
-    (_type *)malloc(sizeof(_type))
+#define bf_malloc(_type) (_type *)malloc(sizeof(_type))
 
- /**
-  * @brief ´´½¨Ò»¸öÁ´±í½Úµã
-  *
-  * @param [in] _type Á´±íÖĞÔªËØµÄÀàĞÍ
-  * @return ·µ»ØĞÂ´´½¨µÄÁ´±í½ÚµãÖ¸Õë
-  */
-#define bf_blist_new_node(_type)             \
-    (bf_blist *)malloc(sizeof(bf_blist) + sizeof(_type))
+/**
+ * \brief åˆ›å»ºä¸€ä¸ªé“¾è¡¨èŠ‚ç‚¹
+ * \param [in] _type é“¾è¡¨ä¸­å…ƒç´ çš„ç±»å‹
+ * \return è¿”å›æ–°åˆ›å»ºçš„é“¾è¡¨èŠ‚ç‚¹æŒ‡é’ˆ
+ */
+#define bf_new_node(_type) (bf_list *)malloc(sizeof(bf_list) + sizeof(_type))
 
-  /**
-   * @brief ´«ÈëÁ´±í½Úµã£¬»ñÈ¡½ÚµãµÄÔªËØ
-   *
-   * @param [in] _node ´«ÈëµÄÁ´±í½ÚµãÖ¸Õë
-   * @param [in] _type Á´±íÔªËØµÄÀàĞÍ
-   * @return ·µ»Ø_typeÔªËØµÄÖ¸Õë
-   */
-#define bf_blist_get_elem(_node, _type)      \
-    ((_type *)(((char *)_node) + sizeof(bf_blist)))
+/**
+ * \brief ä¼ å…¥é“¾è¡¨èŠ‚ç‚¹ï¼Œè·å–èŠ‚ç‚¹çš„å…ƒç´ 
+ * \param [in] _node ä¼ å…¥çš„é“¾è¡¨èŠ‚ç‚¹æŒ‡é’ˆ
+ * \param [in] _type é“¾è¡¨å…ƒç´ çš„ç±»å‹
+ * \return è¿”å›_typeå…ƒç´ çš„æŒ‡é’ˆ
+ */
+#define bf_get_elem(_node, _type) ((_type *)(((char *)_node) + sizeof(bf_list)))
 
-   /**
-   * @brief ³õÊ¼»¯Á´±íÍ·½Úµã
-   *
-   * @param [in] _list Á´±íÍ·½ÚµãÖ¸Õë
-   */
-#define bf_blist_init(_list)                 \
-    do                                      \
-    {                                       \
-        _list->next = _list;                \
-        _list->prev = _list;                \
+/**
+ * \brief åˆå§‹åŒ–é“¾è¡¨å¤´èŠ‚ç‚¹
+ * \param [in] _list é“¾è¡¨å¤´èŠ‚ç‚¹æŒ‡é’ˆ
+ */
+#define bf_list_init(_list)  \
+    do                       \
+    {                        \
+        _list->next = _list; \
+        _list->prev = _list; \
     } while (0);
 
-   /**
-    * @brief ÅĞ¶Ï½ÚµãÊÇ·ñÎª¿Õ
-    *
-    * @param [in] _list Á´±í½Úµã
-    */
-#define bf_blist_empty(_list)    __CMP_REG(_list,NULL)
-
-    /**
-     * @brief ½«½Úµã²åÈëµ½Ö¸¶¨½ÚµãÖ®Ç°
-     *
-     * @param [in] _list Á´±íÖĞµÄÄ³¸ö½ÚµãÖ¸Õë
-     * @param [in] _node Òª²åÈëµÄ½ÚµãÖ¸Õë
-     */
-#define bf_blist_insert_before(_list, _node) \
+#define bf_list_empty(_list) __CMP_REG(_list, NULL)
+/**
+ * \brief å°†èŠ‚ç‚¹æ’å…¥åˆ°æŒ‡å®šèŠ‚ç‚¹ä¹‹å‰
+ * \param [in] _list é“¾è¡¨ä¸­çš„æŸä¸ªèŠ‚ç‚¹æŒ‡é’ˆ
+ * \param [in] _node è¦æ’å…¥çš„èŠ‚ç‚¹æŒ‡é’ˆ
+ */
+#define bf_list_insert_before(_list, _node) \
     do                                      \
     {                                       \
         _list->prev->next = _node;          \
@@ -85,14 +70,12 @@ typedef struct bf_blist
         _list->prev = _node;                \
     } while (0);
 
-
-     /**
-      * @brief ½«½Úµã²åÈëµ½Ö¸¶¨½ÚµãÖ®ºó
-      *
-      * @param [in] _list Á´±íÖĞµÄÄ³¸ö½ÚµãÖ¸Õë
-      * @param [in] _node Òª²åÈëµÄ½ÚµãÖ¸Õë
-      */
-#define bf_blist_insert_later(_list, _node) \
+/**
+ * \brief å°†èŠ‚ç‚¹æ’å…¥åˆ°æŒ‡å®šèŠ‚ç‚¹ä¹‹å
+ * \param [in] _list é“¾è¡¨ä¸­çš„æŸä¸ªèŠ‚ç‚¹æŒ‡é’ˆ
+ * \param [in] _node è¦æ’å…¥çš„èŠ‚ç‚¹æŒ‡é’ˆ
+ */
+#define bf_list_insert_later(_list, _node) \
     do                                     \
     {                                      \
         _list->next->prev = _node;         \
@@ -101,35 +84,38 @@ typedef struct bf_blist
         _list->next = _node;               \
     } while (0);
 
-
-      /**
-       * @brief ´ÓÁ´±íÖĞÒÆ³ıÖ¸¶¨½Úµã
-       *
-       * @param [in] _node ÒªÒÆ³ıµÄ½ÚµãÖ¸Õë
-       */
-#define bf_blist_remove(_node)              \
-    do                                     \
-    {                                      \
-        _node->prev->next = _node->next;   \
-        _node->next->prev = _node->prev;   \
-        free(_node);                       \
-        _node = NULL;                      \
+/**
+ * \brief ä»é“¾è¡¨ä¸­ç§»é™¤æŒ‡å®šèŠ‚ç‚¹
+ * \param [in] _node è¦ç§»é™¤çš„èŠ‚ç‚¹æŒ‡é’ˆ
+ */
+#define bf_list_remove(_node)             \
+    do                                    \
+    {                                     \
+        _node->prev->next = _node->next;  \
+        _node->next->prev = _node->prev;  \
+        _node->next = _node->prev = NULL; \
     } while (0);
 
-       /**
-       * @brief ±éÀúÁ´±í
-       *
-       * @param [in] _node Á´±í½Úµã
-       */
-#define bf_blist_foreach(_node)              \
-    for (bf_blist *count =  (_node) ? (_node->next) : NULL; count != _node; count = count->next)
+/**
+ * @brief é‡Šæ”¾èŠ‚ç‚¹å†…å­˜
+ *
+ * @param node è¦é‡Šæ”¾çš„èŠ‚ç‚¹
+ */
+#define bf_free_node(_node)                                     \
+    do                                                          \
+    {                                                           \
+        if (((_node->prev) != NULL) || ((_node->next) != NULL)) \
+        {                                                       \
+            free(_node);                                        \
+        }                                                       \
+    } while (0)
 
-       /**
-        * @brief ±éÀúÁ´±íÉ¾³ı½Úµã
-        *
-        * @param [in]  _node Á´±í½Úµã
-       */
-#define bf_blist_for_remove(_node)           \
-    for (bf_blist *pos = _node->next, *n = pos->next; pos != _node; pos = n, n = pos->next)
+/**
+ * \brief
+ *
+ * \param [in] _list é“¾è¡¨å¤´èŠ‚ç‚¹æŒ‡é’ˆ
+ */
+#define bf_list_foreach(_list) \
+    for (bf_list *count = _list->prev; count != _list; count = count->prev)
 
-#endif
+#endif // !__BF_LIST_H

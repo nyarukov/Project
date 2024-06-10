@@ -156,6 +156,9 @@
             "files": [
               {
                 "path": "../../src/config/config.c"
+              },
+              {
+                "path": "../../src/config/config.h"
               }
             ],
             "folders": []
@@ -240,6 +243,9 @@
             "files": [
               {
                 "path": "../../src/protocol/modbus_master.c"
+              },
+              {
+                "path": "../../src/protocol/modbus_rtu.c"
               },
               {
                 "path": "../../src/protocol/modbus_slave.c"

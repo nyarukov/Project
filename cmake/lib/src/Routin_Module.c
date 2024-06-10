@@ -14,10 +14,10 @@ struct bf_list *RM_List = NULL;
 #define Create_Root ({RM_List = bf_malloc(bf_list); bf_list_init(RM_List);})
 
 /**
- * \brief ×¢²áÂ·ÓÉĞÅÏ¢
+ * \brief æ³¨å†Œè·¯ç”±ä¿¡æ¯
  * 
- * \param [in] _ID Ä£¿éID
- * \param [in] _Recv ½ÓÊÜº¯Êı
+ * \param [in] _ID æ¨¡å—ID
+ * \param [in] _Recv æ¥å—å‡½æ•°
  * \return Status 
  */
 Status Routin_Register(int _ID, Status (*_Recv)(int, int, void*, int))
@@ -43,9 +43,9 @@ Status Routin_Register(int _ID, Status (*_Recv)(int, int, void*, int))
 
 
 /**
- * @brief ×¢ÏúÂ·ÓÉĞÅÏ¢
+ * @brief æ³¨é”€è·¯ç”±ä¿¡æ¯
  * 
- * @param _ID Ä£¿éID
+ * @param _ID æ¨¡å—ID
  * @return Status 
  */
 Status Routin_ID_Cancle(int _ID)
@@ -65,7 +65,7 @@ Status Routin_ID_Cancle(int _ID)
 }
 
 /**
- * @brief ×¢ÏúËùÓĞÂ·ÓÉĞÅÏ¢
+ * @brief æ³¨é”€æ‰€æœ‰è·¯ç”±ä¿¡æ¯
  * 
  * @return Status 
  */
@@ -81,7 +81,7 @@ Status Routin_ALL_Cancle(void)
 
 
 /**
- * @brief ±éÀúÂ·ÓÉ±í
+ * @brief éå†è·¯ç”±è¡¨
  * 
  */
 void Routin_Foreach(void)
@@ -93,12 +93,12 @@ void Routin_Foreach(void)
 }
 
 /**
- * \brief Â·ÓÉ×ª·¢Êı¾İµ½Ä¿µÄÄ£¿é
+ * \brief è·¯ç”±è½¬å‘æ•°æ®åˆ°ç›®çš„æ¨¡å—
  * 
- * \param [in] _Src Ô´Ä£¿éID£¬¿É¸ù¾İ´ËID×öÒ»Ğ©¶îÍâµÄ²Ù×÷£¬Èç°´Ô´Ä£¿é¸ñÊ½½øĞĞ½â°ü·ÖÎö
- * \param [in] _Dst Ä¿µÄÄ£¿éID£¬¸ù¾İ´ËÕÒµ½Ä¿µÄÄ£¿éÂ·ÓÉ£¬²¢µ÷ÓÃÄ¿µÄÄ£¿éµÄrecv½Ó¿Ú
- * \param [in] _pBuf Êä³öµÄÊı¾İ£¬¿ÉÒÔÊÇÌØ¶¨¸ñÊ½µÄÊı¾İ£¬²¢ÔÚ´Ë½Ó¿ÚÖĞ½âÎöÊı¾İ
- * \param [in] _Len ÊäÈëµÄÊı¾İ³¤¶È
+ * \param [in] _Src æºæ¨¡å—IDï¼Œå¯æ ¹æ®æ­¤IDåšä¸€äº›é¢å¤–çš„æ“ä½œï¼Œå¦‚æŒ‰æºæ¨¡å—æ ¼å¼è¿›è¡Œè§£åŒ…åˆ†æ
+ * \param [in] _Dst ç›®çš„æ¨¡å—IDï¼Œæ ¹æ®æ­¤æ‰¾åˆ°ç›®çš„æ¨¡å—è·¯ç”±ï¼Œå¹¶è°ƒç”¨ç›®çš„æ¨¡å—çš„recvæ¥å£
+ * \param [in] _pBuf è¾“å‡ºçš„æ•°æ®ï¼Œå¯ä»¥æ˜¯ç‰¹å®šæ ¼å¼çš„æ•°æ®ï¼Œå¹¶åœ¨æ­¤æ¥å£ä¸­è§£ææ•°æ®
+ * \param [in] _Len è¾“å…¥çš„æ•°æ®é•¿åº¦
  * \return Status 
  */
 Status Route_Forward(int _Src, int _Dst, void * _pBuf, int _Len)

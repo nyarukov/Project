@@ -20,7 +20,7 @@
 
 DO_PARA DO;
 
-void init_do(void)
+void Init_DO(void)
 {
     #if defined(DO1)
         INIT_DO_PIN(DO1);
@@ -223,7 +223,7 @@ void init_do(void)
     #endif
 }
 
-#endif
+
 
 void DO_Proc(void)
 {
@@ -436,3 +436,5 @@ void DO_Proc(void)
     }
 }
 // clang-format on
+
+#endif

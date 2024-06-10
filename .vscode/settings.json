@@ -1,3 +1,6 @@
 {
-    "cmake.sourceDirectory": "D:/Project/cmake"
+  "cmake.sourceDirectory": "D:/Project/cmake",
+  "files.associations": {
+    "bf_middle.h": "c"
+  }
 }

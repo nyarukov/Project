@@ -12,22 +12,6 @@
 #if (I2C_COUNT > 0)
 // C 文件内容...
 
-typedef struct I2C_Config
-{
-    uint8_t SCL_IO;
-    uint8_t SDA_IO;
-    uint8_t Mode;
-    uint8_t Slave_Addr;  // 作为从机的地址
-    uint8_t Slave_Count; // 作为主机时从机的数量
-    uint32_t Clock_Speed;
-} I2C_Config;
-
-typedef struct I2C_Slave_Config
-{
-    uint8_t Addr;
-    Buffer_t Rx_Buf;
-} I2C_Slave_Config;
-
 #define INIT_CONFIG(SCL, SDA, MODE, Addr,   \
                     SlaveCount, ClockSpeed) \
     {                                       \
@@ -39,8 +23,14 @@ typedef struct I2C_Slave_Config
         .Clock_Speed = ClockSpeed           \
     }
 
+#define INIT_LOG_I2C(I2CX, MSG)      \
+    if (I2CX == 1)                   \
+    {                                \
+        _I2C_LOG("--> " MSG "\r\n"); \
+    }
+
 // clang-format off
-static struct I2C_Config Config[I2C_COUNT] = {
+struct I2C_Config i2c_Config[I2C_COUNT] = {
     #if I2C1_EN == 1
         INIT_CONFIG(I2C1_SCL, I2C1_SDA,
                     I2C1_SLAVE_ADDR,
@@ -70,7 +60,7 @@ static struct I2C_Config Config[I2C_COUNT] = {
     #endif
 };
 
-#define I2C_OF(i2c)     (Config[(i2c)])
+#define I2C_OF(i2c)     (i2c_Config[(i2c)])
 // clang-format on
 
 static void Soft_I2C_Config(I2C_Config *_Para)
@@ -95,21 +85,10 @@ void Soft_I2C_Init(void)
         Soft_I2C_Config(&I2C_OF(i));
     }
     // clang-format off
-    #if I2C1_EN == 1
-        _LOG("--> I2C1_BUS_Init!\r\n");
-    #endif
-
-    #if I2C2_EN == 1
-        _LOG("--> I2C2_BUS_Init!\r\n", NULL);
-    #endif
-
-    #if I2C3_EN == 1
-        _LOG("--> I2C3_BUS_Init!\r\n", NULL);
-    #endif
-
-    #if I2C4_EN == 1
-        _LOG("--> I2C4_BUS_Init!\r\n", NULL);
-    #endif
+    INIT_LOG_I2C(I2C1_EN,"I2C1_BUS_Init")
+    INIT_LOG_I2C(I2C2_EN,"I2C2_BUS_Init")
+    INIT_LOG_I2C(I2C3_EN,"I2C3_BUS_Init")
+    INIT_LOG_I2C(I2C4_EN,"I2C4_BUS_Init")
     // clang-format on
 }
 
@@ -277,10 +256,10 @@ void Soft_I2C_SacnBus(I2C_ID _ID)
     {
         if (Soft_I2C_AddrCheck(_ID, i << 1) == BF_ACK)
         {
-            _LOG("Addr:[%#X]\t", i << 1);
+            _I2C_LOG("Addr:[%#X]\t", i << 1);
         }
     }
-    _LOG("\r\n");
+    _I2C_LOG("\r\n");
 }
 
 /**
@@ -290,7 +269,7 @@ void Soft_I2C_SacnBus(I2C_ID _ID)
  * @param _Addr 设备地址
  * @param _RegAddr 寄存器地址
  * @param _Data 要发送的字节数据
- * @return Status 操作状态，BF_OK表示成功，BF_NACK表示ACK失败
+ * @return Status 操作状态，BF_SUCCESS表示成功，BF_NACK表示ACK失败
  */
 Status Soft_I2C_WriteByteWithACK(I2C_ID _ID, uint8_t _Addr,
                                  uint8_t _RegAddr,
@@ -327,7 +306,7 @@ Status Soft_I2C_WriteByteWithACK(I2C_ID _ID, uint8_t _Addr,
 
     ENABLE_INT();
 
-    return BF_OK;
+    return BF_SUCCESS;
 }
 
 /**
@@ -337,7 +316,7 @@ Status Soft_I2C_WriteByteWithACK(I2C_ID _ID, uint8_t _Addr,
  * @param _Addr 设备地址
  * @param _RegAddr 寄存器地址
  * @param _pData 接收数据的指针
- * @return Status 操作状态，BF_OK表示成功，BF_NACK表示ACK失败
+ * @return Status 操作状态，BF_SUCCESS表示成功，BF_NACK表示ACK失败
  */
 Status Soft_I2C_ReadByteWithACK(I2C_ID _ID, uint8_t _Addr,
                                 uint8_t _RegAddr,
@@ -379,7 +358,7 @@ Status Soft_I2C_ReadByteWithACK(I2C_ID _ID, uint8_t _Addr,
 
     ENABLE_INT();
 
-    return BF_OK;
+    return BF_SUCCESS;
 }
 
 /**
@@ -390,7 +369,7 @@ Status Soft_I2C_ReadByteWithACK(I2C_ID _ID, uint8_t _Addr,
  * @param _RegAddr 寄存器地址
  * @param _pBuf 要写入的数据缓冲区指针
  * @param _Len 数据长度
- * @return Status 操作状态，BF_OK表示成功，BF_NACK表示失败
+ * @return Status 操作状态，BF_SUCCESS表示成功，BF_NACK表示失败
  */
 Status Soft_I2C_Write(I2C_ID _ID, uint8_t _Addr,
                       uint8_t _RegAddr,
@@ -430,7 +409,7 @@ Status Soft_I2C_Write(I2C_ID _ID, uint8_t _Addr,
 
     ENABLE_INT();
 
-    return BF_OK;
+    return BF_SUCCESS;
 }
 
 /**
@@ -441,7 +420,7 @@ Status Soft_I2C_Write(I2C_ID _ID, uint8_t _Addr,
  * @param _RegAddr 寄存器地址
  * @param _pBuf 接收数据的缓冲区指针
  * @param _Len 要读取的数据长度
- * @return Status 操作状态，BF_OK表示成功，BF_NACK表示失败
+ * @return Status 操作状态，BF_SUCCESS表示成功，BF_NACK表示失败
  */
 Status Soft_I2C_Read(I2C_ID _ID, uint8_t _Addr,
                      uint8_t _RegAddr,
@@ -486,7 +465,7 @@ Status Soft_I2C_Read(I2C_ID _ID, uint8_t _Addr,
 
     ENABLE_INT();
 
-    return BF_OK;
+    return BF_SUCCESS;
 }
 
 #endif

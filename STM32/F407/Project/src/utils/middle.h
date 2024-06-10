@@ -32,9 +32,11 @@
 #include "lib.h"
 #include "list.h"
 #include "buffer.h"
+#include "config.h"
+#include "Routin_Module.h"
 #include "stm32f4xx.h"
 #include "stm32f4xx_it.h"
-#include "uart.h"
+#include "systick.h"
 
 #define ENABLE_INT() __set_PRIMASK(0)  /* 使能全局中断 */
 #define DISABLE_INT() __set_PRIMASK(1) /* 禁止全局中断 */

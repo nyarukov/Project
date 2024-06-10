@@ -18,7 +18,7 @@
 
 DI_PARA DI;
 
-void init_di(void)
+void Init_DI(void)
 {
     /***********************************************/
     #if defined(DI1)

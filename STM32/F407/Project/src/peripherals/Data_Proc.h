@@ -11,5 +11,15 @@
 #define __DATA_PROC_H
 
 // 头文件内容...
-
+#include "middle.h"
+#include "uart.h"
+void Com_DataProc(void);
+void COM1_Proc(uint8_t *_pBuf, uint32_t _Len);
+void COM2_Proc(uint8_t *_pBuf, uint32_t _Len);
+void COM3_Proc(uint8_t *_pBuf, uint32_t _Len);
+void COM4_Proc(uint8_t *_pBuf, uint32_t _Len);
+void COM5_Proc(uint8_t *_pBuf, uint32_t _Len);
+void COM6_Proc(uint8_t *_pBuf, uint32_t _Len);
+void COM7_Proc(uint8_t *_pBuf, uint32_t _Len);
+void COM8_Proc(uint8_t *_pBuf, uint32_t _Len);
 #endif

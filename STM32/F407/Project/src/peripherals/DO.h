@@ -14,15 +14,7 @@
 
 #include "gpio.h"
 
-// clang-format off
-#define DO_MODE         GPIO_Mode_OUT
-#define DO_OTYP         GPIO_OType_PP
-#define DO_SPEED        GPIO_Speed_50MHz
-
-
-#define DO_NUM          (2)
-
-#define DO_GROUP        BYTE_COUNT(DO_NUM)
+#if DO_NUM > 0
 
 typedef struct
 {
@@ -32,13 +24,8 @@ typedef struct
 
 extern DO_PARA DO;
 
-
-#define DO1             PF9
-#define DO2             PF10
-
-// clang-format on
-
-void init_do(void);
+void Init_DO(void);
 void DO_Proc(void);
 
+#endif
 #endif

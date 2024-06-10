@@ -8,24 +8,9 @@
  */
 
 #include "uart.h"
-#include "modbus_slave.h"
 //  C 文件内容...
 
 #if (UART_COUNT > 0)
-
-typedef struct COM_Config
-{
-    USART_TypeDef *Port;
-    uint32_t Buad;
-    uint8_t Tx_IO;
-    uint8_t Rx_IO;
-    uint8_t Rs_IO;
-    uint8_t Data : 4;
-    uint8_t Stop : 2;
-    uint8_t Parity : 2;
-    struct Buffer_t TxBuf;
-    struct Buffer_t RxBuf;
-} __attribute__((packed)) COM_Config;
 
 #define UART_WAIT_FOR_TX_COMPLETE(_Id) while (!(COM_OF(_Id).Port->SR & (1 << 7)))
 
@@ -35,7 +20,8 @@ typedef struct COM_Config
                     TX, RX, RS,                       \
                     DATA, STOP, PARITY,               \
                     TX_BUFFER, TX_BUF_SIZE,           \
-                    RX_BUFFER, RX_BUF_SIZE)           \
+                    RX_BUFFER, RX_BUF_SIZE,           \
+                    CALLBACK)                         \
     {                                                 \
         .Port = PORT, .Buad = BAUD,                   \
         .Tx_IO = TX, .Rx_IO = RX, .Rs_IO = RS,        \
@@ -50,9 +36,14 @@ typedef struct COM_Config
                   .Write = 0,                         \
                   .Read = 0,                          \
                   .Count = 0},                        \
+        .Callback = CALLBACK,                         \
     }
 
-#define COM_OF(com) (Config[(com)])
+#define INIT_LOG_UART(UARTX, MSG)      \
+    if (UARTX##_EN == 1)               \
+    {                                  \
+        _LOG("--> " MSG "\r\n", NULL); \
+    }
 
 #if UART1_EN == 1
 uint8_t UART1_TX_BUFFER[UART1_TX_BUF_SIZE];
@@ -96,14 +87,15 @@ uint8_t UART8_RX_BUFFER[UART8_RX_BUF_SIZE];
 // clang-format off
 
 // clang-format on
-static struct COM_Config Config[UART_COUNT] = {
+struct COM_Config Com_Config[UART_COUNT] = {
 
 #if UART1_EN == 1
     INIT_CONFIG(USART1, UART1_BAUD,
                 UART1_TX, UART1_RX, UART1_RS,
                 UART1_DATA, UART1_STOP, UART1_PARITY,
                 UART1_TX_BUFFER, UART1_TX_BUF_SIZE,
-                UART1_RX_BUFFER, UART1_RX_BUF_SIZE),
+                UART1_RX_BUFFER, UART1_RX_BUF_SIZE,
+                COM1_Proc),
 #endif
 
 #if UART2_EN == 1
@@ -111,7 +103,8 @@ static struct COM_Config Config[UART_COUNT] = {
                 UART2_TX, UART2_RX, UART2_RS,
                 UART2_DATA, UART2_STOP, UART2_PARITY,
                 UART2_TX_BUFFER, UART2_TX_BUF_SIZE,
-                UART2_RX_BUFFER, UART2_RX_BUF_SIZE),
+                UART2_RX_BUFFER, UART2_RX_BUF_SIZE,
+                COM2_Proc),
 #endif
 
 #if UART3_EN == 1
@@ -123,7 +116,7 @@ static struct COM_Config Config[UART_COUNT] = {
 #endif
 
 #if UART4_EN == 1
-    INIT_CONFIG(USART4, UART4_BAUD,
+    INIT_CONFIG(UART4, UART4_BAUD,
                 UART4_TX, UART4_RX, UART4_RS,
                 UART4_DATA, UART4_STOP, UART4_PARITY,
                 UART4_TX_BUFFER, UART4_TX_BUF_SIZE,
@@ -131,7 +124,7 @@ static struct COM_Config Config[UART_COUNT] = {
 #endif
 
 #if UART5_EN == 1
-    INIT_CONFIG(USART5, UART5_BAUD,
+    INIT_CONFIG(UART5, UART5_BAUD,
                 UART5_TX, UART5_RX, UART5_RS,
                 UART5_DATA, UART5_STOP, UART5_PARITY,
                 UART5_TX_BUFFER, UART5_TX_BUF_SIZE,
@@ -147,7 +140,7 @@ static struct COM_Config Config[UART_COUNT] = {
 #endif
 
 #if UART7_EN == 1
-    INIT_CONFIG(USART7, UART7_BAUD,
+    INIT_CONFIG(UART7, UART7_BAUD,
                 UART7_TX, UART7_RX, UART7_RS,
                 UART7_DATA, UART7_STOP, UART7_PARITY,
                 UART7_TX_BUFFER, UART7_TX_BUF_SIZE,
@@ -155,7 +148,7 @@ static struct COM_Config Config[UART_COUNT] = {
 #endif
 
 #if UART8_EN == 1
-    INIT_CONFIG(USART8, UART8_BAUD,
+    INIT_CONFIG(UART8, UART8_BAUD,
                 UART8_TX, UART8_RX, UART8_RS,
                 UART8_DATA, UART8_STOP, UART8_PARITY,
                 UART8_TX_BUFFER, UART8_TX_BUF_SIZE,
@@ -163,8 +156,6 @@ static struct COM_Config Config[UART_COUNT] = {
 #endif
 
 };
-
-
 
 static void UART_Init(COM_Config *_Para)
 {
@@ -262,7 +253,7 @@ static void UART_Init(COM_Config *_Para)
 #if UART6_EN == 1
     else if (Uartx == USART6)
     {
-        RCC_APB6PeriphClockCmd(RCC_APB6Periph_USART6, ENABLE);
+        RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART6, ENABLE);
         NVIC_InitStructure.NVIC_IRQChannel = USART6_IRQn;
 
         if (UART6_REUSE != UART_REUSE_NO)
@@ -349,7 +340,7 @@ static void UART_Init(COM_Config *_Para)
     NVIC_Init(&NVIC_InitStructure);
 }
 
-void COM_Init(void)
+void Init_Com(void)
 {
 
     for (uint8_t i = 0; i < UART_COUNT; i++)
@@ -357,39 +348,14 @@ void COM_Init(void)
         UART_Init(&COM_OF(i));
     }
     _LOG("\r\n", NULL);
-    // clang-format off
-    #if UART1_EN == 1
-    _LOG("--> COM1_Init!\r\n", NULL);
-    #endif
-
-    #if UART2_EN == 1
-        _LOG("--> COM2_Init!\r\n", NULL);
-    #endif
-
-    #if UART3_EN == 1
-        _LOG("--> COM3_Init!\r\n", NULL);
-    #endif
-
-    #if UART4_EN == 1
-        _LOG("--> COM4_Init!\r\n", NULL);
-    #endif
-
-    #if UART5_EN == 1
-        _LOG("--> COM5_Init!\r\n", NULL);
-    #endif
-
-    #if UART6_EN == 1
-        _LOG("--> COM16_Init!\r\n", NULL);
-    #endif
-
-    #if UART7_EN == 1
-        _LOG("--> COM7_Init!\r\n", NULL);
-    #endif
-
-    #if UART8_EN == 1
-        _LOG("--> COM8_Init!\r\n", NULL);
-    #endif
-    // clang-format on
+    INIT_LOG_UART(UART1, "COM1_Init")
+    INIT_LOG_UART(UART2, "COM2_Init")
+    INIT_LOG_UART(UART3, "COM3_Init")
+    INIT_LOG_UART(UART4, "COM4_Init")
+    INIT_LOG_UART(UART5, "COM5_Init")
+    INIT_LOG_UART(UART6, "COM6_Init")
+    INIT_LOG_UART(UART7, "COM7_Init")
+    INIT_LOG_UART(UART8, "COM8_Init")
 }
 
 void Rs_485(COM_ID _Id, uint8_t Status)
@@ -401,9 +367,7 @@ Status Uart_SendData(COM_ID _Id, uint8_t *_pBuf, uint32_t _Len)
 {
     Status flag;
     DISABLE_INT();
-    flag = Buffer_Operation(&COM_OF(_Id).TxBuf,
-                            _pBuf, _Len,
-                            BUFFER_WRITE_BYTE, NULL);
+    flag = Buffer_Write_Byte(&COM_OF(_Id).TxBuf, _pBuf, _Len);
     ENABLE_INT();
     USART_ITConfig(COM_OF(_Id).Port, USART_IT_TXE, ENABLE);
     return flag;
@@ -419,11 +383,9 @@ void Uart_Sendch(COM_ID _Id, uint8_t ch)
 void Uart_SendNextByte(COM_ID _Id)
 {
     uint8_t t_data;
-    if (Buffer_Operation(&COM_OF(_Id).TxBuf,
-                         &t_data, 1,
-                         BUFFER_READ_BYTE, NULL) == BF_OK)
+    if (Buffer_Read_Byte(&COM_OF(_Id).TxBuf, &t_data, 1) == BF_SUCCESS)
     {
-        Uart_Sendch(_Id, t_data);
+        COM_OF(_Id).Port->DR = t_data;
     }
 }
 
@@ -458,15 +420,15 @@ void BF_Printf(COM_ID _Id, const char *format, ...)
 
 void Uart_Proc(COM_ID _Id)
 {
-    uint32_t size, len;
+    uint32_t size;
     USART_TypeDef *USARTx = COM_OF(_Id).Port;
 
     if (USART_GetITStatus(USARTx, USART_IT_RXNE) != RESET)
     {
         uint8_t r_data = USART_ReceiveData(USARTx);
-        if (Buffer_Operation(&COM_OF(_Id).RxBuf,
-                             &r_data, 1,
-                             BUFFER_WRITE_BYTE, NULL) == BF_FULL)
+
+        if (Buffer_Write_Byte(&COM_OF(_Id).RxBuf, &r_data, 1) == BF_FULL)
+
         {
             _ERR_LOG;
         }
@@ -476,26 +438,8 @@ void Uart_Proc(COM_ID _Id)
     if (USART_GetITStatus(USARTx, USART_IT_IDLE) != RESET)
     {
         USART_ClearFlag(USARTx, USART_IT_IDLE);
-
-        if (Buffer_Operation(&COM_OF(_Id).RxBuf,
-                             NULL, NULL,
-                             BUFFER_WRITTEN_COUNT, &len) == BF_OK &&
-            len > 0)
-        {
-            USART_ITConfig(USARTx, USART_IT_IDLE, DISABLE);
-
-            if (_Id == COM2)
-            {
-                Modbus_Slave_Proc(&Salve1, COM_OF(_Id).RxBuf.Buf, len);
-            }
-            else
-            {
-                Uart_SendData(_Id, COM_OF(_Id).RxBuf.Buf, len);
-            }
-            Buffer_Operation(&COM_OF(_Id).RxBuf,
-                             NULL, NULL,
-                             BUFFER_CLEAR, 0);
-        }
+        USART_ITConfig(USARTx, USART_IT_IDLE, DISABLE);
+        COM_OF(_Id).Callback(COM_OF(_Id).RxBuf.Buf, COM_OF(_Id).RxBuf.Count);
     }
 
     if (USART_GetITStatus(USARTx, USART_IT_TXE) != RESET)
@@ -505,9 +449,8 @@ void Uart_Proc(COM_ID _Id)
             Rs_485(_Id, 1);
         }
         USART_ClearITPendingBit(USARTx, USART_IT_TXE);
-        if (Buffer_Operation(&COM_OF(_Id).TxBuf,
-                             NULL, NULL,
-                             BUFFER_WRITTEN_COUNT, &size) == BF_OK)
+
+        if (Buffer_Get_Written_Count(&COM_OF(_Id).TxBuf, &size) == BF_SUCCESS)
         {
             if (size == 0)
             {
@@ -524,10 +467,7 @@ void Uart_Proc(COM_ID _Id)
     if (USART_GetITStatus(USARTx, USART_IT_TC) != RESET)
     {
         USART_ClearITPendingBit(USARTx, USART_IT_TC);
-
-        if (Buffer_Operation(&COM_OF(_Id).TxBuf,
-                             NULL, NULL,
-                             BUFFER_WRITTEN_COUNT, &size) == BF_OK)
+        if (Buffer_Get_Written_Count(&COM_OF(_Id).TxBuf, &size) == BF_SUCCESS)
         {
             if (size == 0)
             {
@@ -546,60 +486,42 @@ void Uart_Proc(COM_ID _Id)
     }
 }
 
+#define UART_IRQ_HANDLER(ID, USART_IRQ_FUNC) \
+    void USART_IRQ_FUNC(void)                \
+    {                                        \
+        Uart_Proc(ID);                       \
+    }
+
 #if UART1_EN == 1
-void USART1_IRQHandler(void)
-{
-    Uart_Proc((COM_ID)COM1_IDX);
-}
+UART_IRQ_HANDLER(COM1, USART1_IRQHandler)
 #endif
 
 #if UART2_EN == 1
-void USART2_IRQHandler(void)
-{
-    Uart_Proc((COM_ID)COM2_IDX);
-}
+UART_IRQ_HANDLER(COM2, USART2_IRQHandler)
 #endif
 
 #if UART3_EN == 1
-void USART3_IRQHandler(void)
-{
-    Uart_Proc((COM_ID)COM3_IDX);
-}
+UART_IRQ_HANDLER(COM3, USART3_IRQHandler)
 #endif
 
 #if UART4_EN == 1
-void UART4_IRQHandler(void)
-{
-    Uart_Proc((COM_ID)COM4_IDX);
-}
+UART_IRQ_HANDLER(COM4, UART4_IRQHandler)
 #endif
 
 #if UART5_EN == 1
-void UART5_IRQHandler(void)
-{
-    Uart_Proc((COM_ID)COM5_IDX);
-}
+UART_IRQ_HANDLER(COM5, UART5_IRQHandler)
 #endif
 
 #if UART6_EN == 1
-void USART6_IRQHandler(void)
-{
-    Uart_Proc((COM_ID)COM6_IDX);
-}
+UART_IRQ_HANDLER(COM6, USART6_IRQHandler)
 #endif
 
 #if UART7_EN == 1
-void UART7_IRQHandler(void)
-{
-    Uart_Proc((COM_ID)COM7_IDX);
-}
+UART_IRQ_HANDLER(COM7, UART7_IRQHandler)
 #endif
 
 #if UART8_EN == 1
-void UART8_IRQHandler(void)
-{
-    Uart_Proc((COM_ID)COM8_IDX);
-}
+UART_IRQ_HANDLER(COM8, UART8_IRQHandler)
 #endif
 
 #endif // !UART_COUNT

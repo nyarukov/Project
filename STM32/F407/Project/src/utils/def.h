@@ -61,36 +61,65 @@
 #define __MASK_BIT(DATA, MASK)                              ((DATA) & ((1 << MASK)))        /*保留指定位*/
 
 
+// 内存分配宏
+#define BFmalloc(type, size)                                (type *)malloc(sizeof(type) * size);
+#define BFfree(prt)                                         free(prt)
+
+// clang-format on
+
+// 空指针检查宏
+#define Check_NULL(ptr)             \
+    do                              \
+    {                               \
+        if ((ptr) == NULL)          \
+        {                           \
+            return BF_NULL_POINTER; \
+        }                           \
+    } while (0)
+
+// CRC校验宏
+#define Check_CRC(buf, len, crc)                                 \
+    do                                                           \
+    {                                                            \
+        *(crc) = Check_Modbus_CRC16(buf, len - 2);               \
+        if (LEBufToUint16(buf[len - 1], buf[len - 2]) != *(crc)) \
+        {                                                        \
+            return BF_CRC_ERROR;                                 \
+        }                                                        \
+    } while (0);
+
+#include <stdio.h>
 
 typedef enum
 {
-
-    BF_OK = 0x0,                            // 成功
-    BF_FAILURE,                             // 失败
-    BF_ERROR,                               // 错误
-    BF_INTI,                                // 初始化
-    BF_CONNECT,                             // 链接
-    BF_ADDR_ERROR,                          // 地址错误
-    BF_CRC_ERROR,                           // CRC错误
-    BF_ACK,                                 // 应答
-    BF_NACK,                                // 未应答
-    BF_FULL,                                // 满
-    BF_EMPTY,                               // 空
-    BF_INVALID_PARAM,                       // 无效的参数
-    BF_NULL_POINTER,                        // 空指针
-    BF_INVALID_LENGTH,                      // 无效长度
-    BF_TOO_SMALL,                           // 过小
-    BF_TOO_LARGE,                           // 过大
-    BF_NOT_FOUND,                           // 未找到
-    BF_PERMISSION_DENIED,                   // 权限被拒绝
-    BF_TIMEOUT,                             // 超时
-    BF_NOT_SUPPORTED,                       // 不支持的操作
-    BF_INTERRUPTED,                         // 被中断
-    BF_OUT_OF_MEMORY,                       // 内存不足
-    BF_NETWORK_ERROR,                       // 网络错误
-    BF_FILE_NOT_FOUND,                      // 文件未找到
-    BF_CORRUPT_DATA,                        // 数据损坏
-    BF_DUPLICATE_ENTRY                      // 重复的条目
+    BF_SUCCESS = 0,             // 成功
+    BF_ERROR_LENGTH = -1,       // 长度错误
+    BF_ERROR_MEMORY = -2,       // 拷贝错误
+    BF_FAILURE = -3,            // 失败
+    BF_ERROR = -4,              // 错误
+    BF_INTI = 1,                // 初始化
+    BF_CONNECT = 2,             // 链接
+    BF_ADDR_ERROR = -5,         // 地址错误
+    BF_CRC_ERROR = -6,          // CRC错误
+    BF_ACK = 3,                 // 应答
+    BF_NACK = -7,               // 未应答
+    BF_FULL = 4,                // 满
+    BF_EMPTY = 5,               // 空
+    BF_INVALID_PARAM = -8,      // 无效的参数
+    BF_NULL_POINTER = -9,       // 空指针
+    BF_INVALID_LENGTH = -10,    // 无效长度
+    BF_TOO_SMALL = -11,         // 过小
+    BF_TOO_LARGE = -12,         // 过大
+    BF_NOT_FOUND = -13,         // 未找到
+    BF_PERMISSION_DENIED = -14, // 权限被拒绝
+    BF_TIMEOUT = -15,           // 超时
+    BF_NOT_SUPPORTED = -16,     // 不支持的操作
+    BF_INTERRUPTED = -17,       // 被中断
+    BF_OUT_OF_MEMORY = -18,     // 内存不足
+    BF_NETWORK_ERROR = -19,     // 网络错误
+    BF_FILE_NOT_FOUND = -20,    // 文件未找到
+    BF_CORRUPT_DATA = -21,      // 数据损坏
+    BF_DUPLICATE_ENTRY = -22    // 重复的条目
 } Status;
-// clang-format on
+
 #endif

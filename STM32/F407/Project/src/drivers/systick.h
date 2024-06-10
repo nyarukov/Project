@@ -22,7 +22,7 @@
 
 // clang-format on
 
-void inti_systemtick(void);
+void Inti_Systemtick(void);
 void Delay_Us(uint32_t us);
 void Delay_Ms(uint32_t ms);
 

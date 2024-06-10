@@ -10,7 +10,7 @@
 #include "systick.h"
 
 // C 文件内容...
-void inti_systemtick(void)
+void Inti_Systemtick(void)
 {
     SysTick->LOAD = (SystemCoreClock / SYSTICK_VAL) - 1;
     SysTick->VAL = 0UL;

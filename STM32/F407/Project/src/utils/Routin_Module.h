@@ -14,15 +14,17 @@
 
 #include "middle.h"
 
+#define _LOG_Routin(...) //_LOG(__VA_ARGS__)
+
 typedef struct
 {
     int ID;
-    Status (*Send)(int _Src, int _Dst, void * _pBuf, int _Len);
-    Status (*Recv)(int _Src, int _Dst, void * _pBuf, int _Len);
-}Routin_Module;
+    Status (*Send)(int _Src, int _Dst, void *_pBuf, int _Len);
+    Status (*Recv)(int _Src, int _Dst, void *_pBuf, int _Len);
+} Routin_Module;
 
-Status Routin_Register(int _ID, Status (*_Recv)(int, int, void*, int));
-Status Route_Forward(int _Src, int _Dst, void * _pBuf, int _Len);
+Status Routin_Register(int _ID, Status (*_Recv)(int, int, void *, int));
+Status Route_Forward(int _Src, int _Dst, void *_pBuf, int _Len);
 Status Routin_ID_Cancle(int _ID);
 Status Routin_ALL_Cancle(void);
 void Routin_Foreach(void);

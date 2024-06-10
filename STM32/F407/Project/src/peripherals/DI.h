@@ -14,20 +14,10 @@
 
 #include "gpio.h"
 
+#if DI_NUM > 0
 // clang-format off
-#define DI_MODE         GPIO_Mode_IN
-#define DI_OTYP         GPIO_OType_OD
-#define DI_PUPD         GPIO_PuPd_UP
 
 #define DI_Press_OK     (0x01)
-
-#define DI_NUM          (3)
-
-#define DI_GROUP        BYTE_COUNT(DI_NUM)
-
-#define DI1             PE4
-#define DI2             PE3
-#define DI3             PE2
 
 // clang-format on
 
@@ -40,7 +30,9 @@ typedef struct
 
 extern DI_PARA DI;
 
-void init_di(void);
+void Init_DI(void);
 void DI_Read(void);
+
+#endif
 
 #endif

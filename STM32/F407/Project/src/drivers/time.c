@@ -229,7 +229,7 @@ void TIM1_BRK_TIM9_IRQHandler(void)
         // 在这里进行你的操作
         // 清除 TIM1 中断标志位
         TIM_ClearITPendingBit(TIM1, TIM_IT_Break);
-        _LOG("TIM1_BRK_TIM9_IRQHandler\r\n");
+        // _LOG("TIM1_BRK_TIM9_IRQHandler\r\n");
     }
 }
 void TIM1_UP_TIM10_IRQHandler(void)
@@ -239,7 +239,7 @@ void TIM1_UP_TIM10_IRQHandler(void)
         // 在这里进行你的操作
         // 清除 TIM1 中断标志位
         TIM_ClearITPendingBit(TIM1, TIM_IT_Update);
-        _LOG("TIM1_UP_TIM10_IRQHandler\r\n");
+        // _LOG("TIM1_UP_TIM10_IRQHandler\r\n");
     }
 }
 void TIM1_TRG_COM_TIM11_IRQHandler(void)
@@ -249,7 +249,7 @@ void TIM1_TRG_COM_TIM11_IRQHandler(void)
         // 在这里进行你的操作
         // 清除 TIM1 中断标志位
         TIM_ClearITPendingBit(TIM1, TIM_IT_Trigger);
-        _LOG("TIM1_TRG_COM_TIM11_IRQHandler\r\n");
+        // _LOG("TIM1_TRG_COM_TIM11_IRQHandler\r\n");
     }
 }
 void TIM1_CC_IRQHandler(void)
@@ -259,28 +259,28 @@ void TIM1_CC_IRQHandler(void)
         // 在这里进行你的操作
         // 清除 TIM1 中断标志位
         TIM_ClearITPendingBit(TIM1, TIM_IT_CC1);
-        _LOG("TIM_IT_CC1\r\n");
+        // _LOG("TIM_IT_CC1\r\n");
     }
     if (TIM_GetITStatus(TIM1, TIM_IT_CC2) != RESET)
     {
         // 在这里进行你的操作
         // 清除 TIM1 中断标志位
         TIM_ClearITPendingBit(TIM1, TIM_IT_CC2);
-        _LOG("TIM_IT_CC2\r\n");
+        // _LOG("TIM_IT_CC2\r\n");
     }
     if (TIM_GetITStatus(TIM1, TIM_IT_CC3) != RESET)
     {
         // 在这里进行你的操作
         // 清除 TIM1 中断标志位
         TIM_ClearITPendingBit(TIM1, TIM_IT_CC3);
-        _LOG("TIM_IT_CC3\r\n");
+        // _LOG("TIM_IT_CC3\r\n");
     }
     if (TIM_GetITStatus(TIM1, TIM_IT_CC4) != RESET)
     {
         // 在这里进行你的操作
         // 清除 TIM1 中断标志位
         TIM_ClearITPendingBit(TIM1, TIM_IT_CC4);
-        _LOG("TIM_IT_CC4\r\n");
+        // _LOG("TIM_IT_CC4\r\n");
     }
 }
 void TIM2_IRQHandler(void)
@@ -290,7 +290,7 @@ void TIM2_IRQHandler(void)
         // 在这里进行你的操作
         // 清除 TIM2 中断标志位
         TIM_ClearITPendingBit(TIM2, TIM_IT_Update);
-        _LOG("TIM2_IRQHandler\r\n");
+        // _LOG("TIM2_IRQHandler\r\n");
     }
 }
 void TIM3_IRQHandler(void)
@@ -300,7 +300,7 @@ void TIM3_IRQHandler(void)
         // 在这里进行你的操作
         // 清除 TIM3 中断标志位
         TIM_ClearITPendingBit(TIM3, TIM_IT_Update);
-        _LOG("TIM3_IRQHandler\r\n");
+        // _LOG("TIM3_IRQHandler\r\n");
     }
 }
 void TIM4_IRQHandler(void)
@@ -310,7 +310,7 @@ void TIM4_IRQHandler(void)
         // 在这里进行你的操作
         // 清除 TIM4 中断标志位
         TIM_ClearITPendingBit(TIM4, TIM_IT_Update);
-        _LOG("TIM4_IRQHandler\r\n");
+        // _LOG("TIM4_IRQHandler\r\n");
     }
 }
 void TIM6_DAC_IRQHandler(void)
@@ -320,6 +320,6 @@ void TIM6_DAC_IRQHandler(void)
         // 在这里进行你的操作
         // 清除 TIM6 中断标志位
         TIM_ClearITPendingBit(TIM6, TIM_IT_Update);
-        _LOG("TIM4_IRQHandler\r\n");
+        // _LOG("TIM4_IRQHandler\r\n");
     }
 }
