@@ -1,0 +1,98 @@
+/**
+ * @file bf_def.h
+ * @author yusaka (luckychaoyue1@gmail.com)
+ * @brief 
+ * @version 1.0
+ * @date 2024-05-22
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
+#ifndef __BF_DEF_H
+#define __BF_DEF_H
+
+#include "bf_middle.h"
+
+/************************************************?????????????*******************************************************/
+#define __I                             volatile const /* ??????? */
+#define __O                             volatile       /* ?§Õ???? */
+#define __IO                            volatile      /* ??§Õ???? */
+
+/* Memory attributes for peripherals accessible through AXI or AHB interfaces */
+#define __IM                            volatile const /* ??????? */
+#define __OM                            volatile       /* ?§Õ???? */
+#define __IOM                           volatile      /* ??§Õ???? */
+
+/************************************************??????????????*******************************************************/
+#define ARRAY_SIZE(x)                   (sizeof(x) / (sizeof((x)[0])))
+
+/************************************************?????????*******************************************************/
+#define CONCAT(a, b)                    a##b /* ???????????? */
+#define STR(s)                          #s         /* ??????????????? */
+
+/************************************************????*******************************************************/
+#define BMIN(a, b)                      ((a) < (b) ? (a) : (b)) /* ??§³????? */
+#define BMAX(a, b)                      ((a) > (b) ? (a) : (b)) /* ???????? */
+#define BABS(x)                         ((x) < 0 ? -(x) : (x))     /* ????????? */
+
+/************************************************??????*******************************************************/
+#define SWAP_BYTE(x)                    (((x) << 4) | ((x) >> 4)) /*??????*/
+#define SWAP_UINT16(x)                  (((x) << 8) | ((x) >> 8)) /*16¦Ë??????????*/
+#define BEBufToUint16(byte1, byte2)     ((((byte1) & 0xFF) | ((uint16_t)byte2) << 8)) /*????????????16¦Ë????*/
+#define LEBufToUint16(byte1, byte2)     ((((uint16_t)byte1) << 8) | ((byte2) & 0xFF)) /*§³???????????16¦Ë????*/
+#define HIGH_BYTE(x)                    ((x) >> 8) /*????16¦Ë?????*/
+#define LOW_BYTE(x)                     ((x) & 0xFF) /*????16¦Ë?????*/
+
+
+/************************************************?????????¦Ë????*******************************************************/
+#define __SET_BIT(REG, MASK)            ((REG) |= (MASK))    /* ???¨¹???????¦Ë */
+#define __CLEAR_BIT(REG, MASK)          ((REG) &= ~(MASK))          /* ???????????¦Ë */
+#define __READ_BIT(REG, MASK)           ((REG) & (MASK))    /* ???????????¦Ë */
+#define __CLEAR_REG(REG)                ((REG) = (0x0))          /* ????????????¦Ë */
+#define __WRITE_REG(REG, MASK)          ((REG) = (MASK))   /* ??????§Õ??? */
+#define __CMP_REG(REG, MASK)            ((REG) == (MASK))    /* ???????? */
+#define __MASK_BIT(DATA, MASK)          ((DATA) & ((1 << MASK)))      /*???????¦Ë*/
+
+
+typedef enum
+{
+    BF_ERROR = -2,             // ????
+    BF_FAILURE = -1,           // ???
+    BF_OK = 0,            // ???
+    BF_FULL,              // ??
+    BF_EMPTY,             // ??
+    BF_INVALID_PARAM,     // ??§¹?????
+    BF_NULL_POINTER,      // ?????
+    BF_INVALID_LENGTH,    // ??§¹????
+    BF_TOO_SMALL,         // ??§³
+    BF_TOO_LARGE,         // ????
+    BF_NOT_FOUND,         // ¦Ä???
+    BF_PERMISSION_DENIED, // ???????
+    BF_TIMEOUT,           // ???
+    BF_NOT_SUPPORTED,     // ?????????
+    BF_INTERRUPTED,       // ???§Ø?
+    BF_OUT_OF_MEMORY,     // ??ÖÎ??
+    BF_NETWORK_ERROR,     // ???????
+    BF_FILE_NOT_FOUND,    // ???¦Ä???
+    BF_CORRUPT_DATA,      // ??????
+    BF_DUPLICATE_ENTRY    // ????????
+} Status;
+
+// void Swap_Byte_Long(uint8_t *buf)
+// {
+//     uint64_t result = 0;
+
+//     result |= ((uint64_t)buf[0] << 56);
+//     result |= ((uint64_t)buf[1] << 48);
+//     result |= ((uint64_t)buf[2] << 40);
+//     result |= ((uint64_t)buf[3] << 32);
+//     result |= ((uint64_t)buf[4] << 24);
+//     result |= ((uint64_t)buf[5] << 16);
+//     result |= ((uint64_t)buf[6] << 8);
+//     result |= ((uint64_t)buf[7]);
+
+//     *((uint64_t*)buf) = result;
+// }
+
+
+#endif 

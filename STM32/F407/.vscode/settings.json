@@ -1,0 +1,17 @@
+{
+    "files.associations": {
+        "modbus_slave.h": "c",
+        "lib.h": "c",
+        "def.h": "c",
+        "stdint.h": "c",
+        "stdio.h": "c",
+        "string.h": "c",
+        "uart.h": "c",
+        "stm32f4xx.h": "c",
+        "middle.h": "c",
+        "list.h": "c",
+        "bsp_systick.h": "c",
+        "bsp_gpio.h": "c",
+        "gpio.h": "c"
+    }
+}

@@ -1,0 +1,504 @@
+{
+  "name": "project",
+  "type": "ARM",
+  "dependenceList": [],
+  "srcDirs": [
+    ".eide/deps"
+  ],
+  "virtualFolder": {
+    "name": "<virtual_root>",
+    "files": [],
+    "folders": [
+      {
+        "name": "libs",
+        "files": [],
+        "folders": [
+          {
+            "name": "assembly",
+            "files": [
+              {
+                "path": "../../libs/assembly/startup_stm32f40_41xxx.s"
+              }
+            ],
+            "folders": []
+          },
+          {
+            "name": "inc",
+            "files": [
+              {
+                "path": "../../libs/inc/stm32f4xx_it.c"
+              },
+              {
+                "path": "../../libs/inc/system_stm32f4xx.c"
+              }
+            ],
+            "folders": []
+          },
+          {
+            "name": "stm32_lib",
+            "files": [
+              {
+                "path": "../../libs/stm32_lib/src/misc.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_adc.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_can.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_crc.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_cryp_aes.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_cryp_des.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_cryp_tdes.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_cryp.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_dac.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_dbgmcu.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_dcmi.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_dma.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_dma2d.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_exti.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_flash_ramfunc.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_flash.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_fsmc.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_gpio.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_hash_md5.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_hash_sha1.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_hash.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_i2c.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_iwdg.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_ltdc.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_pwr.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_rcc.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_rng.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_rtc.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_sai.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_sdio.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_spi.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_syscfg.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_tim.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_usart.c"
+              },
+              {
+                "path": "../../libs/stm32_lib/src/stm32f4xx_wwdg.c"
+              }
+            ],
+            "folders": []
+          }
+        ]
+      },
+      {
+        "name": "src",
+        "files": [],
+        "folders": [
+          {
+            "name": "config",
+            "files": [
+              {
+                "path": "../../src/config/config.c"
+              },
+              {
+                "path": "../../src/config/config.h"
+              }
+            ],
+            "folders": []
+          },
+          {
+            "name": "drivers",
+            "files": [
+              {
+                "path": "../../src/drivers/gpio.c"
+              },
+              {
+                "path": "../../src/drivers/hard_i2c.c"
+              },
+              {
+                "path": "../../src/drivers/hard_spi.c"
+              },
+              {
+                "path": "../../src/drivers/soft_i2c.c"
+              },
+              {
+                "path": "../../src/drivers/soft_spi.c"
+              },
+              {
+                "path": "../../src/drivers/systick.c"
+              },
+              {
+                "path": "../../src/drivers/time.c"
+              },
+              {
+                "path": "../../src/drivers/uart.c"
+              }
+            ],
+            "folders": []
+          },
+          {
+            "name": "peripherals",
+            "files": [
+              {
+                "path": "../../src/peripherals/Basic_Tim.c"
+              },
+              {
+                "path": "../../src/peripherals/Data_Proc.c"
+              },
+              {
+                "path": "../../src/peripherals/DI.c"
+              },
+              {
+                "path": "../../src/peripherals/DO.c"
+              },
+              {
+                "path": "../../src/peripherals/InputCap_Tim.c"
+              },
+              {
+                "path": "../../src/peripherals/main.c"
+              },
+              {
+                "path": "../../src/peripherals/mpu6050.c"
+              },
+              {
+                "path": "../../src/peripherals/Mqtt_ESP_8266.c"
+              },
+              {
+                "path": "../../src/peripherals/oled_096.c"
+              },
+              {
+                "path": "../../src/peripherals/oled_menu.c"
+              },
+              {
+                "path": "../../src/peripherals/OutputCompare_Tim.c"
+              },
+              {
+                "path": "../../src/peripherals/Pwm_Tim.c"
+              },
+              {
+                "path": "../../src/peripherals/Struct_Para.c"
+              },
+              {
+                "path": "../../src/peripherals/w25qxx.c"
+              }
+            ],
+            "folders": []
+          },
+          {
+            "name": "protocol",
+            "files": [
+              {
+                "path": "../../src/protocol/modbus_master.c"
+              },
+              {
+                "path": "../../src/protocol/modbus_rtu.c"
+              },
+              {
+                "path": "../../src/protocol/modbus_slave.c"
+              },
+              {
+                "path": "../../src/protocol/xmode.c"
+              },
+              {
+                "path": "../../src/protocol/ymode.c"
+              }
+            ],
+            "folders": []
+          },
+          {
+            "name": "utils",
+            "files": [
+              {
+                "path": "../../src/utils/buffer.c"
+              },
+              {
+                "path": "../../src/utils/buffer.h"
+              },
+              {
+                "path": "../../src/utils/def.h"
+              },
+              {
+                "path": "../../src/utils/lib.c"
+              },
+              {
+                "path": "../../src/utils/lib.h"
+              },
+              {
+                "path": "../../src/utils/list.h"
+              },
+              {
+                "path": "../../src/utils/middle.h"
+              },
+              {
+                "path": "../../src/utils/Queue.c"
+              },
+              {
+                "path": "../../src/utils/Routin_Module.c"
+              },
+              {
+                "path": "../../src/utils/Routin_Module.h"
+              },
+              {
+                "path": "../../src/utils/Stack.c"
+              }
+            ],
+            "folders": []
+          }
+        ]
+      }
+    ]
+  },
+  "outDir": "build",
+  "deviceName": null,
+  "packDir": null,
+  "miscInfo": {
+    "uid": "8d73956cd2069c97678cac102327ad17"
+  },
+  "targets": {
+    "Project": {
+      "excludeList": [],
+      "toolchain": "AC5",
+      "compileConfig": {
+        "cpuType": "Cortex-M4",
+        "floatingPointHardware": "single",
+        "scatterFilePath": "",
+        "useCustomScatterFile": false,
+        "storageLayout": {
+          "RAM": [
+            {
+              "tag": "RAM",
+              "id": 1,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "noInit": false
+            },
+            {
+              "tag": "RAM",
+              "id": 2,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "noInit": false
+            },
+            {
+              "tag": "RAM",
+              "id": 3,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "noInit": false
+            },
+            {
+              "tag": "IRAM",
+              "id": 1,
+              "mem": {
+                "startAddr": "0x20000000",
+                "size": "0x20000"
+              },
+              "isChecked": true,
+              "noInit": false
+            },
+            {
+              "tag": "IRAM",
+              "id": 2,
+              "mem": {
+                "startAddr": "0x10000000",
+                "size": "0x10000"
+              },
+              "isChecked": false,
+              "noInit": false
+            }
+          ],
+          "ROM": [
+            {
+              "tag": "ROM",
+              "id": 1,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "isStartup": false
+            },
+            {
+              "tag": "ROM",
+              "id": 2,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "isStartup": false
+            },
+            {
+              "tag": "ROM",
+              "id": 3,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "isStartup": false
+            },
+            {
+              "tag": "IROM",
+              "id": 1,
+              "mem": {
+                "startAddr": "0x8000000",
+                "size": "0x80000"
+              },
+              "isChecked": true,
+              "isStartup": true
+            },
+            {
+              "tag": "IROM",
+              "id": 2,
+              "mem": {
+                "startAddr": "0x0",
+                "size": "0x0"
+              },
+              "isChecked": false,
+              "isStartup": false
+            }
+          ]
+        },
+        "options": "null"
+      },
+      "uploader": "STLink",
+      "uploadConfig": {
+        "bin": "",
+        "proType": "SWD",
+        "resetMode": "default",
+        "runAfterProgram": true,
+        "speed": 4000,
+        "address": "0x8000000",
+        "elFile": "None",
+        "optionBytes": ".eide/project.st.option.bytes.ini",
+        "otherCmds": ""
+      },
+      "uploadConfigMap": {
+        "JLink": {
+          "bin": "",
+          "baseAddr": "",
+          "cpuInfo": {
+            "vendor": "null",
+            "cpuName": "null"
+          },
+          "proType": 1,
+          "speed": 8000,
+          "otherCmds": ""
+        },
+        "OpenOCD": {
+          "bin": "",
+          "target": "stm32f4x",
+          "interface": "stlink-v2-1",
+          "baseAddr": "0x08000000"
+        },
+        "STLink": {
+          "bin": "",
+          "proType": "SWD",
+          "resetMode": "default",
+          "runAfterProgram": true,
+          "speed": 4000,
+          "address": "0x8000000",
+          "elFile": "None",
+          "optionBytes": ".eide/project.st.option.bytes.ini",
+          "otherCmds": ""
+        },
+        "pyOCD": {
+          "bin": "",
+          "targetName": "cortex_m",
+          "baseAddr": "0x08000000",
+          "speed": "4M",
+          "config": ".eide/project.pyocd.yaml"
+        }
+      },
+      "custom_dep": {
+        "name": "default",
+        "incList": [
+          "../../libs/inc",
+          "../../libs/stm32_lib/inc",
+          "../../src/config",
+          "../../src/utils",
+          "../../src/drivers",
+          "../../src/protocol",
+          "../../src/peripherals",
+          ".cmsis/include",
+          "../keil/RTE/_Project",
+          ".eide/deps"
+        ],
+        "libList": [],
+        "sourceDirList": [],
+        "defineList": [
+          "STM32F40_41xxx",
+          "USE_STDPERIPH_DRIVER"
+        ]
+      }
+    }
+  },
+  "version": "3.3"
+}

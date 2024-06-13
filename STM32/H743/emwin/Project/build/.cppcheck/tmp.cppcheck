@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- !!! Embedded IDE: Cppcheck config template !!! -->
+<project version="1">
+    <builddir>build</builddir>
+    <platform>arm32-wchar_t2</platform>
+    <analyze-all-vs-configs>false</analyze-all-vs-configs>
+    <check-headers>true</check-headers>
+    <check-unused-templates>true</check-unused-templates>
+    <max-ctu-depth>2</max-ctu-depth>
+    <max-template-recursion>100</max-template-recursion>
+    <includedir>
+        <!-- !!! DON'T MODIFY THE FLOLLOWING CONTENTS !!! -->
+        <dir name="../../../CMSIS/Device/Include/"/>
+		<dir name="../../../CMSIS/Include/"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Inc/Legacy/"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Inc/"/>
+		<dir name="../../../Core/Inc/"/>
+		<dir name="../../../Drive/Inc/"/>
+		<dir name="../../../enWim/Config/"/>
+		<dir name="../../../enWim/emWin_Demo/"/>
+		<dir name="../../../enWim/Inc/"/>
+		<dir name="../../../enWim/Lib/"/>
+		<dir name="../../../enWim/OS/"/>
+		<dir name="../../.cmsis/include/"/>
+		<dir name="../../RTE/_emWin/"/>
+		<dir name="../../.eide/deps/"/>
+		<dir name="../../../../../../../../../Software/Keil_v5/ARM/ARMCC/include/"/>
+		<dir name="../../../../../../../../../Software/Keil_v5/ARM/ARMCC/include/rw/"/>
+    </includedir>
+    <defines>
+        <!-- example: <define name="DEF=123"/> -->
+        <define name="__VSCODE_CPPTOOL"/>
+		<define name="USE_HAL_DRIVER"/>
+		<define name="STM32H743xx"/>
+    </defines>
+    <undefines>
+        <!-- example: <undefine>UNDEF</undefine> -->
+    </undefines>
+    <paths>
+        <!-- !!! DON'T MODIFY THE FLOLLOWING CONTENTS !!! -->
+        <dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma2d.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fmac.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_hsem.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_ltdc_ex.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_ltdc.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_mdma.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_sdram.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c"/>
+		<dir name="../../../STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_fmc.c"/>
+		<dir name="../../../enWim/OS/GUI_X.c"/>
+		<dir name="../../../enWim/emWin_Demo/MainTask.c"/>
+		<dir name="../../../enWim/Config/GUI_X_Touch_Analog.c"/>
+		<dir name="../../../enWim/Config/GUIConf.c"/>
+		<dir name="../../../enWim/Config/GUIDRV_Template.c"/>
+		<dir name="../../../enWim/Config/LCDConf.c"/>
+		<dir name="../../../Drive/Src/bsp_bmp.c"/>
+		<dir name="../../../Drive/Src/bsp_btim.c"/>
+		<dir name="../../../Drive/Src/bsp_exti.c"/>
+		<dir name="../../../Drive/Src/bsp_ft5426.c"/>
+		<dir name="../../../Drive/Src/bsp_key.c"/>
+		<dir name="../../../Drive/Src/bsp_led.c"/>
+		<dir name="../../../Drive/Src/bsp_ltdc_draw.c"/>
+		<dir name="../../../Drive/Src/bsp_ltdc_driver.c"/>
+		<dir name="../../../Drive/Src/bsp_mpu.c"/>
+		<dir name="../../../Drive/Src/bsp_mpu6050.c"/>
+		<dir name="../../../Drive/Src/bsp_rcc.c"/>
+		<dir name="../../../Drive/Src/bsp_sdram.c"/>
+		<dir name="../../../Drive/Src/bsp_softiic.c"/>
+		<dir name="../../../Drive/Src/bsp_softspi.c"/>
+		<dir name="../../../Drive/Src/bsp_uart.c"/>
+		<dir name="../../../Drive/Src/bsp.c"/>
+		<dir name="../../../Core/Src/main.c"/>
+		<dir name="../../../Core/Src/stm32h7xx_hal_msp.c"/>
+		<dir name="../../../Core/Src/stm32h7xx_it.c"/>
+		<dir name="../../../Core/Src/system_stm32h7xx.c"/>
+    </paths>
+    <libraries>
+        <!-- example: <library>gnu</library> -->
+        <library>gnu</library>
+    </libraries>
+</project>

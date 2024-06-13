@@ -1,0 +1,342 @@
+{
+  "name": "enWim",
+  "type": "ARM",
+  "dependenceList": [],
+  "srcDirs": [
+    ".eide/deps"
+  ],
+  "virtualFolder": {
+    "name": "<virtual_root>",
+    "files": [],
+    "folders": [
+      {
+        "name": "CMSIS",
+        "files": [
+          {
+            "path": "../CMSIS/Device/Source/startup_stm32h743xx.s"
+          }
+        ],
+        "folders": []
+      },
+      {
+        "name": "Core",
+        "files": [
+          {
+            "path": "../Core/Src/main.c"
+          },
+          {
+            "path": "../Core/Src/stm32h7xx_hal_msp.c"
+          },
+          {
+            "path": "../Core/Src/stm32h7xx_it.c"
+          },
+          {
+            "path": "../Core/Src/system_stm32h7xx.c"
+          }
+        ],
+        "folders": []
+      },
+      {
+        "name": "Drive",
+        "files": [
+          {
+            "path": "../Drive/Src/bsp_bmp.c"
+          },
+          {
+            "path": "../Drive/Src/bsp_btim.c"
+          },
+          {
+            "path": "../Drive/Src/bsp_exti.c"
+          },
+          {
+            "path": "../Drive/Src/bsp_ft5426.c"
+          },
+          {
+            "path": "../Drive/Src/bsp_key.c"
+          },
+          {
+            "path": "../Drive/Src/bsp_led.c"
+          },
+          {
+            "path": "../Drive/Src/bsp_ltdc_draw.c"
+          },
+          {
+            "path": "../Drive/Src/bsp_ltdc_driver.c"
+          },
+          {
+            "path": "../Drive/Src/bsp_mpu.c"
+          },
+          {
+            "path": "../Drive/Src/bsp_mpu6050.c"
+          },
+          {
+            "path": "../Drive/Src/bsp_rcc.c"
+          },
+          {
+            "path": "../Drive/Src/bsp_sdram.c"
+          },
+          {
+            "path": "../Drive/Src/bsp_softiic.c"
+          },
+          {
+            "path": "../Drive/Src/bsp_softspi.c"
+          },
+          {
+            "path": "../Drive/Src/bsp_uart.c"
+          },
+          {
+            "path": "../Drive/Src/bsp.c"
+          }
+        ],
+        "folders": []
+      },
+      {
+        "name": "emWin",
+        "files": [],
+        "folders": [
+          {
+            "name": "Config",
+            "files": [
+              {
+                "path": "../enWim/Config/GUI_X_Touch_Analog.c"
+              },
+              {
+                "path": "../enWim/Config/GUIConf.c"
+              },
+              {
+                "path": "../enWim/Config/GUIDRV_Template.c"
+              },
+              {
+                "path": "../enWim/Config/LCDConf.c"
+              }
+            ],
+            "folders": []
+          },
+          {
+            "name": "Demo",
+            "files": [
+              {
+                "path": "../enWim/emWin_Demo/MainTask.c"
+              }
+            ],
+            "folders": []
+          },
+          {
+            "name": "Lib",
+            "files": [
+              {
+                "path": "../enWim/Lib/GUI_CM4F_L.lib"
+              }
+            ],
+            "folders": []
+          },
+          {
+            "name": "OS",
+            "files": [
+              {
+                "path": "../enWim/OS/GUI_X.c"
+              }
+            ],
+            "folders": []
+          }
+        ]
+      },
+      {
+        "name": "STM32H7xx_HAL_Driver",
+        "files": [
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_cortex.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma_ex.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_dma2d.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_exti.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash_ex.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_flash.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_fmac.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_gpio.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_hsem.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_ltdc_ex.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_ltdc.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_mdma.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr_ex.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_pwr.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc_ex.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_rcc.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_sdram.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim_ex.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_tim.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart_ex.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_uart.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart_ex.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal_usart.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_hal.c"
+          },
+          {
+            "path": "../STM32H7xx_HAL_Driver/Src/stm32h7xx_ll_fmc.c"
+          }
+        ],
+        "folders": []
+      }
+    ]
+  },
+  "outDir": "build",
+  "deviceName": null,
+  "packDir": null,
+  "miscInfo": {
+    "uid": "d8c7e0c2118a255833df7c91bb507f7b"
+  },
+  "targets": {
+    "emWin": {
+      "excludeList": [],
+      "toolchain": "AC5",
+      "compileConfig": {
+        "cpuType": "Cortex-M7",
+        "floatingPointHardware": "double",
+        "useCustomScatterFile": false,
+        "scatterFilePath": "<YOUR_SCATTER_FILE>.sct",
+        "storageLayout": {
+          "RAM": [
+            {
+              "tag": "IRAM",
+              "id": 1,
+              "mem": {
+                "startAddr": "0x20000000",
+                "size": "0x20000"
+              },
+              "isChecked": false,
+              "noInit": false
+            },
+            {
+              "tag": "IRAM",
+              "id": 2,
+              "mem": {
+                "startAddr": "0x24000000",
+                "size": "0x80000"
+              },
+              "isChecked": true,
+              "noInit": false
+            }
+          ],
+          "ROM": [
+            {
+              "tag": "IROM",
+              "id": 1,
+              "mem": {
+                "startAddr": "0x08000000",
+                "size": "0x200000"
+              },
+              "isChecked": true,
+              "isStartup": true
+            }
+          ]
+        },
+        "options": "null"
+      },
+      "uploader": "STLink",
+      "uploadConfig": {
+        "bin": "",
+        "proType": "SWD",
+        "resetMode": "SWrst",
+        "runAfterProgram": true,
+        "speed": 4000,
+        "address": "0x08000000",
+        "elFile": "None",
+        "optionBytes": ".eide/emwin.st.option.bytes.ini",
+        "otherCmds": ""
+      },
+      "uploadConfigMap": {
+        "JLink": {
+          "bin": "",
+          "baseAddr": "",
+          "cpuInfo": {
+            "vendor": "null",
+            "cpuName": "null"
+          },
+          "proType": 1,
+          "speed": 8000,
+          "otherCmds": ""
+        },
+        "OpenOCD": {
+          "bin": "",
+          "target": "stm32h7x",
+          "interface": "stlink-v2",
+          "baseAddr": "0x08000000"
+        }
+      },
+      "custom_dep": {
+        "name": "default",
+        "incList": [
+          "../CMSIS/Device/Include",
+          "../CMSIS/Include",
+          "../STM32H7xx_HAL_Driver/Inc/Legacy",
+          "../STM32H7xx_HAL_Driver/Inc",
+          "../Core/Inc",
+          "../Drive/Inc",
+          "../enWim/Config",
+          "../enWim/emWin_Demo",
+          "../enWim/Inc",
+          "../enWim/Lib",
+          "../enWim/OS",
+          ".cmsis/include",
+          "RTE/_emWin",
+          ".eide/deps"
+        ],
+        "libList": [],
+        "sourceDirList": [],
+        "defineList": [
+          "USE_HAL_DRIVER",
+          "STM32H743xx"
+        ]
+      }
+    }
+  },
+  "version": "3.3"
+}
